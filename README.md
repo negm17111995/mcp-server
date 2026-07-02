@@ -118,7 +118,7 @@ Transport: Streamable HTTP (JSON-RPC over POST)
 
 ## 🛠️ What AI agents can do
 
-The MCP server exposes Nuitee Connect as structured tools your AI can call:
+The MCP server exposes its booking engine as structured tools your AI can call:
 - Hotel search
 - Price & availability
 - Place search
@@ -325,6 +325,6 @@ MIT — use freely in any project.
 
 <div align="center">
 
-**Built by [MAQAMI](https://maqami.co)** · Powered by Nuitee Connect · Secured by Cloudflare
+**Built by [MAQAMI](https://maqami.co)** · Secured by Cloudflare
 
 </div>
