@@ -116,7 +116,15 @@ Transport: Streamable HTTP (JSON-RPC over POST)
 
 ---
 
-## 🛠️ What Your AI Can Do
+## 🛠️ What AI agents can do
+
+The MCP server exposes Nuitee Connect as structured tools your AI can call:
+- Hotel search
+- Price & availability
+- Place search
+- Hotel details
+- Prebooking
+- Booking
 
 MAQAMI exposes **65 tools** that let your AI assistant handle the complete travel booking lifecycle:
 
@@ -200,7 +208,7 @@ Once connected, just talk naturally to your AI:
 ## 🌐 Coverage
 
 - **249 countries** worldwide
-- **2M+ hotels** across all major chains and independents
+- **3M+ hotels** across all major chains and independents
 - **Real-time pricing** from multiple suppliers
 - **Multi-currency** support (USD, EUR, GBP, SAR, AED, and more)
 
