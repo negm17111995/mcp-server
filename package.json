@@ -1,0 +1,36 @@
+{
+  "name": "maqami-mcp-server",
+  "version": "1.0.0",
+  "description": "MAQAMI Travel MCP Server — Book hotels in 249 countries with any AI agent. 65 tools for hotel search, flights, bookings, loyalty, and analytics. Zero API keys needed.",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "model-context-protocol",
+    "travel",
+    "hotel",
+    "hotel-booking",
+    "flights",
+    "ai-agent",
+    "ai-tools",
+    "claude",
+    "cursor",
+    "windsurf",
+    "booking",
+    "travel-api",
+    "hotel-search",
+    "nuitee",
+    "maqami"
+  ],
+  "author": "MAQAMI <hello@maqami.co> (https://maqami.co)",
+  "license": "MIT",
+  "homepage": "https://maqami.co",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/negm17111995/mcp-server"
+  },
+  "bugs": {
+    "url": "https://github.com/negm17111995/mcp-server/issues"
+  }
+}
