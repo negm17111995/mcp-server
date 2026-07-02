@@ -92,6 +92,20 @@ Add to your Cline MCP settings:
 }
 ```
 
+### Google Antigravity
+
+Add this to your `.gemini/config/mcps.json` or configure it directly in the Antigravity IDE:
+
+```json
+{
+  "mcpServers": {
+    "maqami-travel": {
+      "url": "https://mcp.maqami.co/"
+    }
+  }
+}
+```
+
 ### Any MCP Client
 
 ```
