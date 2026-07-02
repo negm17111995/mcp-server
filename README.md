@@ -8,6 +8,7 @@
 [![Hotels](https://img.shields.io/badge/Hotels-249_Countries-green?style=for-the-badge)](https://maqami.co)
 [![Tools](https://img.shields.io/badge/Tools-65-orange?style=for-the-badge)](https://mcp.maqami.co)
 [![Auth](https://img.shields.io/badge/Auth-None_Required-brightgreen?style=for-the-badge)](https://mcp.maqami.co)
+[![smithery badge](https://smithery.ai/badge/ahmednegm-1711/maqami-travel)](https://smithery.ai/servers/ahmednegm-1711/maqami-travel)
 
 <br />
 
