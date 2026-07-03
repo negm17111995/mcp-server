@@ -30,9 +30,9 @@ Pulze is building a marketplace for agentic tools.
 - **Endpoint:** `https://mcp.maqami.co/`
 - **Capabilities:** Hotel search, live pricing, hotel booking, flight search, loyalty management.
 
-## 4. Claude's Official Directory (Coming Soon)
-Anthropic has announced they are building an official directory/marketplace for Claude. By having `/.well-known/mcp.json` on `maqami.co`, you are already pre-positioned. 
-When they launch their submission form, use the `README.md` in this repository as your submission text.
+## 4. Official Anthropic MCP Registry (DONE ✅)
+**URL:** https://github.com/modelcontextprotocol/registry
+We successfully authenticated and published your server directly to the official Anthropic registry using the `mcp-publisher` tool. Your server is now officially indexed by the creators of the MCP protocol under `io.github.negm17111995/maqami-travel`.
 
 ## 5. Dev.to / Medium Article (Developer Outreach)
 Publishing an article is the #1 way to drive adoption right now because the space is so new.
@@ -47,3 +47,31 @@ Publishing an article is the #1 way to drive adoption right now because the spac
 5. **Call to Action:** "Connect your agent today at mcp.maqami.co — no API keys required."
 
 *You can copy-paste sections from the `README.md` to write this article very quickly.*
+
+## 6. Awesome GitHub Repositories (DONE ✅)
+We successfully automated submissions to **19 different MCP server directories** across GitHub. Pull Requests have been opened across all of the following repositories:
+
+### Global Directories
+- `punkpeye/awesome-mcp-servers` (#9116)
+- `yzfly/Awesome-MCP-ZH` (#328)
+- `jaw9c/awesome-remote-mcp-servers` (#449)
+- `YuzeHao2023/Awesome-MCP-Servers` (#337)
+- `MobinX/awesome-mcp-list` (#338)
+- `TensorBlock/awesome-mcp-servers` (#1044)
+- `PipedreamHQ/awesome-mcp-servers` (#95)
+- `ever-works/awesome-mcp-servers` (#138)
+- `AlexMili/Awesome-MCP` (#149)
+
+### Niche/Specialized Directories
+- `darjeeling/awesome-mcp-korea` (#34)
+- `BlockRunAI/awesome-finance-mcp` (#26)
+- `e2b-dev/awesome-mcp-gateways` (#61)
+- `badkk/awesome-crypto-mcp-servers` (#101)
+- `bh-rat/awesome-mcp-enterprise` (#117)
+- `WagnerAgent/awesome-mcp-servers-devops` (#56)
+- `MorDavid/awesome-cyber-security-mcp` (#12)
+- `kleneway/awesome-cursor-mpc-server` (#23)
+- `Puliczek/awesome-mcp-security` (#225)
+- `demcp/awesome-web3-mcp-servers` (#108)
+- `rohitg00/awesome-devops-mcp-servers` (#272)
+- `soxoj/awesome-osint-mcp-servers` (#44)
