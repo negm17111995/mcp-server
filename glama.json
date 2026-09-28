@@ -1,18 +1,6 @@
 {
-  "$schema": "https://glama.ai/schema/glama.json",
-  "license": "MIT",
-  "name": "MAQAMI Travel MCP Server",
-  "description": "Book hotels and flights worldwide with B2B wholesale net rates. Up to 30% cheaper than OTAs. 89 tools for hotel search, price comparison, flight fares, and bookings across 249 countries.",
-  "homepage": "https://maqami.co",
-  "author": {
-    "name": "MAQAMI",
-    "email": "hello@maqami.co",
-    "url": "https://maqami.co"
-  },
-  "categories": ["travel", "booking", "flights", "hotels"],
-  "keywords": ["travel", "hotel", "flight", "booking", "mcp", "ai-agent"],
-  "links": {
-    "github": "https://github.com/negm17111995/mcp-server",
-    "homepage": "https://maqami.co"
-  }
+  "$schema": "https://glama.ai/mcp/schemas/server.json",
+  "maintainers": [
+    "negm17111995"
+  ]
 }
