@@ -2,6 +2,11 @@
 
 # 🏨 MAQAMI Travel — MCP Server
 
+[![Glama MCP Server](https://glama.ai/mcp/servers/negm17111995/mcp-server/badge)](https://glama.ai/mcp/servers/negm17111995/mcp-server)
+[![npm version](https://img.shields.io/npm/v/maqami-travel.svg)](https://www.npmjs.com/package/maqami-travel)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+
 ### Book hotels worldwide with any AI agent. Zero API keys needed.
 
 [![MCP](https://img.shields.io/badge/MCP-Compatible-blue?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0id2hpdGUiPjxwYXRoIGQ9Ik0xMiAyQzYuNDggMiAyIDYuNDggMiAxMnM0LjQ4IDEwIDEwIDEwIDEwLTQuNDggMTAtMTBTMTcuNTIgMiAxMiAyem0wIDE4Yy00LjQyIDAtOC0zLjU4LTgtOHMzLjU4LTggOC04IDggMy41OCA4IDgtMy41OCA4LTggOHoiLz48L3N2Zz4=)](https://modelcontextprotocol.io)
