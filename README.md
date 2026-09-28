@@ -17,7 +17,7 @@
 
 <br />
 
-**Search hotels → Check prices → Prebook → Book — all through your AI assistant.**
+**Search hotels & flights → Compare prices → Prebook → Book — all through your AI assistant.**
 
 No API keys. No signup. Just connect and start booking.
 
