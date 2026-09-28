@@ -1,11 +1,7 @@
 #!/usr/bin/env node
 /**
  * MAQAMI Travel MCP Server
- *
- * A fully functional MCP server (stdio transport) that proxies all tool calls
- * to the MAQAMI Travel backend at https://mcp.maqami.co/
- *
- * Endpoint: https://mcp.maqami.co/
+ * Stdio transport that proxies all tool calls to https://mcp.maqami.co/
  * No authentication required.
  */
 
@@ -29,37 +25,42 @@ async function mcpRequest(method, params = {}) {
   });
 
   const contentType = res.headers.get("content-type") || "";
+
   if (contentType.includes("text/event-stream")) {
     const text = await res.text();
-    for (const line of text.split("
-")) {
+    const lines = text.split("\n");
+    for (const line of lines) {
       if (line.startsWith("data:")) {
         try {
-          const json = JSON.parse(line.slice(5).trim());
-          if (json.result !== undefined || json.error !== undefined) return json;
+          const parsed = JSON.parse(line.slice(5).trim());
+          if (parsed.result !== undefined || parsed.error !== undefined) {
+            return parsed;
+          }
         } catch (_) {}
       }
     }
     throw new Error("No valid JSON-RPC result in SSE stream");
   }
+
   return res.json();
 }
 
 async function fetchTools() {
   const response = await mcpRequest("tools/list", {});
-  if (response.error) throw new Error(`Backend error: ${JSON.stringify(response.error)}`);
+  if (response.error) {
+    throw new Error("Backend error: " + JSON.stringify(response.error));
+  }
   return response.result?.tools ?? [];
 }
 
 async function main() {
   let tools = [];
+
   try {
     tools = await fetchTools();
-    process.stderr.write(`[maqami-mcp] Loaded ${tools.length} tools from backend
-`);
+    process.stderr.write("[maqami-mcp] Loaded " + tools.length + " tools\n");
   } catch (err) {
-    process.stderr.write(`[maqami-mcp] Warning: Could not pre-fetch tools — ${err.message}
-`);
+    process.stderr.write("[maqami-mcp] Warning: " + err.message + "\n");
   }
 
   const server = new Server(
@@ -77,7 +78,7 @@ async function main() {
     const response = await mcpRequest("tools/call", { name, arguments: args ?? {} });
     if (response.error) {
       return {
-        content: [{ type: "text", text: `Error: ${response.error.message ?? JSON.stringify(response.error)}` }],
+        content: [{ type: "text", text: "Error: " + (response.error.message ?? JSON.stringify(response.error)) }],
         isError: true,
       };
     }
@@ -86,12 +87,10 @@ async function main() {
 
   const transport = new StdioServerTransport();
   await server.connect(transport);
-  process.stderr.write("[maqami-mcp] Server running on stdio
-");
+  process.stderr.write("[maqami-mcp] Server running on stdio\n");
 }
 
 main().catch((err) => {
-  process.stderr.write(`[maqami-mcp] Fatal: ${err.message}
-`);
+  process.stderr.write("[maqami-mcp] Fatal: " + err.message + "\n");
   process.exit(1);
 });
