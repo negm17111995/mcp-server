@@ -3,10 +3,15 @@
   "version": "1.0.6",
   "mcpName": "io.github.negm17111995/maqami-travel",
   "description": "Official MCP server for MAQAMI, a hotel and flight booking platform with 3M+ hotels. Search live hotel rates and flights, look up places, airports and hotel details, then prebook and book. Remote Streamable HTTP endpoint, no API key required.",
-  "main": "index.js",
   "type": "module",
   "bin": {
     "maqami-travel": "index.js"
+  },
+  "files": [
+    "index.js"
+  ],
+  "scripts": {
+    "test": "node --test test/bridge.test.js"
   },
   "keywords": [
     "mcp",
@@ -32,7 +37,7 @@
     "url": "https://github.com/negm17111995/mcp-server/issues"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.0.0"
+    "@modelcontextprotocol/sdk": "1.32.0"
   },
   "engines": {
     "node": ">=18.0.0"

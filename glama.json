@@ -2,6 +2,5 @@
   "$schema": "https://glama.ai/mcp/schemas/server.json",
   "maintainers": [
     "negm17111995"
-  ],
-  "description": "Official MCP server for MAQAMI, a hotel and flight booking platform with 3M+ hotels. Search live hotel rates and flights, look up places, airports and hotel details, then prebook and book. Remote Streamable HTTP endpoint, no API key required."
+  ]
 }
