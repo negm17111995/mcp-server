@@ -1,25 +1,29 @@
 # Changelog
 
-All notable changes to the MAQAMI Travel MCP Server.
+All notable changes to the `maqami-travel` npm package and registry metadata.
+
+## [1.0.6] - Unreleased
+
+### Changed
+- `index.js` is now a stdio-to-Streamable-HTTP bridge built on the official MCP SDK client. It performs the full `initialize` handshake with `https://mcp.maqami.co/`, keeps the `Mcp-Session-Id`, and forwards tools, resources and prompts.
+- Pinned `@modelcontextprotocol/sdk` to 1.32.0.
+- The npm tarball ships only the bridge, README, LICENSE and `package.json`.
+- `server.json` declares the remote as `streamable-http` (previously `sse`) and adds the npm stdio package.
+- README rewritten with current connection instructions for each client.
+
+### Removed
+- `index.d.ts`, which declared exports the package never provided.
 
 ## [1.0.5] - 2026-09-28
 
 ### Added
-- Runnable stdio MCP server (`index.js`) that proxies all 89 tools to backend
+- Runnable stdio launcher (`index.js`) that proxied tool calls to the remote endpoint
 - `glama.json` for Glama directory ownership claim
-- GitHub Release v1.0.5 with full changelog
-- Glama and npm badges in README
-- `CHANGELOG.md` (this file)
 
 ### Fixed
 - Package type compatibility: converted to proper ES module
-- SSE stream parsing for tool call responses
 
 ## [1.0.0] - 2025-01-01
 
 ### Added
 - Initial release
-- 89 tools for hotel and flight search
-- Coverage: 249 countries, 2M+ hotels
-- B2B wholesale rates — up to 30% cheaper than OTAs
-- No authentication required
