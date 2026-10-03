@@ -1,39 +1,14 @@
-<div align="center">
+# MAQAMI Travel MCP Server
 
-# 🏨 MAQAMI Travel — MCP Server
+Official MCP server for MAQAMI, a hotel and flight booking platform with 3M+ hotels. Search live hotel rates and flights, look up places, airports and hotel details, then prebook and book. Remote Streamable HTTP endpoint, no API key required.
 
-[![Glama MCP Server](https://glama.ai/mcp/servers/negm17111995/mcp-server/badge)](https://glama.ai/mcp/servers/negm17111995/mcp-server)
-[![npm version](https://img.shields.io/npm/v/maqami-travel.svg)](https://www.npmjs.com/package/maqami-travel)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
-
-### Book hotels worldwide with any AI agent. Zero API keys needed.
-
-[![MCP](https://img.shields.io/badge/MCP-Compatible-blue?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0id2hpdGUiPjxwYXRoIGQ9Ik0xMiAyQzYuNDggMiAyIDYuNDggMiAxMnM0LjQ4IDEwIDEwIDEwIDEwLTQuNDggMTAtMTBTMTcuNTIgMiAxMiAyem0wIDE4Yy00LjQyIDAtOC0zLjU4LTgtOHMzLjU4LTggOC04IDggMy41OCA4IDgtMy41OCA4LTggOHoiLz48L3N2Zz4=)](https://modelcontextprotocol.io)
-[![Hotels](https://img.shields.io/badge/Hotels-249_Countries-green?style=for-the-badge)](https://maqami.co)
-[![Tools](https://img.shields.io/badge/Tools-65-orange?style=for-the-badge)](https://mcp.maqami.co)
-[![Auth](https://img.shields.io/badge/Auth-None_Required-brightgreen?style=for-the-badge)](https://mcp.maqami.co)
-[![smithery badge](https://smithery.ai/badge/ahmednegm-1711/maqami-travel)](https://smithery.ai/servers/ahmednegm-1711/maqami-travel)
-
-<br />
-
-**Search hotels & flights → Compare prices → Prebook → Book — all through your AI assistant.**
-
-No API keys. No signup. Just connect and start booking.
-
-[**Try it now →**](#quick-start) · [Website](https://maqami.co) · [MCP Endpoint](https://mcp.maqami.co)
-
-</div>
-
----
-
-## ⚡ Quick Start
-
-Add this to your AI tool's MCP configuration and start booking hotels in seconds:
+## Connect
 
 ### Claude Desktop
 
-Edit `~/Library/Application Support/Claude/claude_desktop_config.json` (Mac) or `%APPDATA%\Claude\claude_desktop_config.json` (Windows):
+Edit your Claude Desktop config file:
+- macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
+- Windows: `%APPDATA%\Claude\claude_desktop_config.json`
 
 ```json
 {
@@ -45,14 +20,44 @@ Edit `~/Library/Application Support/Claude/claude_desktop_config.json` (Mac) or 
 }
 ```
 
+### Claude.ai Custom Connector
+
+Add a custom connector in Claude.ai:
+
+```
+Name: MAQAMI Travel
+URL: https://mcp.maqami.co/
+```
+
+### Claude Code
+
+```bash
+claude mcp add --transport http maqami-travel https://mcp.maqami.co/
+```
+
 ### Cursor
 
-Edit `.cursor/mcp.json` in your project root:
+Create or edit `.cursor/mcp.json` in your project root:
 
 ```json
 {
   "mcpServers": {
     "maqami-travel": {
+      "url": "https://mcp.maqami.co/"
+    }
+  }
+}
+```
+
+### VS Code / Cline
+
+Add to your Cline MCP settings:
+
+```json
+{
+  "mcpServers": {
+    "maqami-travel": {
+      "type": "streamableHttp",
       "url": "https://mcp.maqami.co/"
     }
   }
@@ -73,254 +78,68 @@ Add via Settings → MCP Servers:
 }
 ```
 
-### Cline (VS Code)
+### ChatGPT / OpenAI Agents SDK
 
-Add to your Cline MCP settings:
-
-```json
-{
-  "mcpServers": {
-    "maqami-travel": {
-      "type": "streamableHttp",
-      "url": "https://mcp.maqami.co/"
-    }
-  }
-}
-```
-
-### Google Antigravity
-
-Add this to your `.gemini/config/mcps.json` or configure it directly in the Antigravity IDE:
+Configure as a remote MCP server:
 
 ```json
 {
   "mcpServers": {
     "maqami-travel": {
-      "url": "https://mcp.maqami.co/"
+      "url": "https://mcp.maqami.co/",
+      "transport": "streamable-http"
     }
   }
 }
 ```
 
-### Any MCP Client
+### Generic Streamable HTTP Clients
 
 ```
 Endpoint: https://mcp.maqami.co/
-Auth: None
 Transport: Streamable HTTP (JSON-RPC over POST)
+Authentication: None
 ```
 
----
+### Local / stdio via npm
 
-## 🛠️ What AI agents can do
+Install and run via npm:
 
-The MCP server exposes its booking engine as structured tools your AI can call:
-- Hotel search
-- Price & availability
-- Place search
-- Hotel details
-- Prebooking
-- Booking
+```bash
+npx -y maqami-travel
+```
 
-MAQAMI exposes **65 tools** that let your AI assistant handle the complete travel booking lifecycle:
+The npm package provides a stdio transport that proxies to the remote endpoint.
 
-### 🏨 Core Booking Flow
+## What you can do
 
-| Step | Tool | Description |
-|------|------|-------------|
-| **Search** | `post_hotels_rates` | Search hotels with live pricing across 249 countries |
-| **Details** | `get_data_hotel` | Full hotel info — amenities, photos, descriptions |
-| **Prebook** | `post_rates_prebook` | Lock in a rate and get a prebook ID |
-| **Book** | `post_rates_book` | Complete the reservation with guest & payment details |
+- **Search hotels** with live rates and availability across 3M+ hotels worldwide
+- **Search flights** and compare fares
+- **Look up places** (cities, landmarks, destinations) and airports
+- **Get hotel details** including amenities, photos, and descriptions
+- **Prebook** to lock in rates before final booking
+- **Book** hotels and flights (creates real reservations and requires guest and payment details)
 
-### ✈️ Flights
+## Example prompts
 
-| Tool | Description |
-|------|-------------|
-| `post_flights_rates` | Search flight rates |
-| `post_flights_prebooks` | Prebook flights |
-| `post_flights_bookings` | Book flights |
+> "Find me a 5-star hotel in Tokyo for March 15-17, 2 adults"
 
-### 📍 Discovery
+> "Search for flights from LAX to JFK on December 10"
 
-| Tool | Description |
-|------|-------------|
-| `get_data_places` | Search places, cities, landmarks |
-| `get_data_hotel_search` | Semantic hotel search ("luxury spa hotel in Bali") |
-| `get_data_hotels_semantic_search` | AI-powered hotel discovery |
-| `get_data_weather` | Weather data for any destination |
+> "Show me hotels near the Eiffel Tower with spa facilities"
 
-### 📊 Management & Analytics
+> "What airports are near San Francisco?"
 
-| Tool | Description |
-|------|-------------|
-| `get_bookings` | List and manage all bookings |
-| `get_guests` | Guest profiles and history |
-| `get_vouchers` | Voucher and promotion management |
-| `post_analytics_report` | Booking analytics and reports |
-| `get_loyalties` | Loyalty program management |
+> "Book the Hilton Tokyo for my trip, guest name John Smith, email john@example.com"
 
-### 🌍 Reference Data
+## Privacy and security
 
-| Tool | Description |
-|------|-------------|
-| `get_data_countries` | 249 countries |
-| `get_data_cities` | Cities worldwide |
-| `get_data_currencies` | Supported currencies |
-| `get_data_chains` | Hotel chains (Hilton, Marriott, etc.) |
-| `get_data_facilities` | Hotel amenities and facilities |
+No API key required. The remote endpoint at https://mcp.maqami.co/ is publicly accessible. Booking data and payment information are handled according to MAQAMI's privacy policy at https://maqami.co.
 
-> See the [full tool list](#complete-tool-list) below for all 65 tools.
+## License
 
----
+MIT
 
-## 💬 Example Conversations
+## Support
 
-Once connected, just talk naturally to your AI:
-
-> **You:** "Find me a 5-star hotel in Istanbul for August 15-17, 2 adults"
->
-> **AI:** *Uses `post_hotels_rates` → returns Hilton Istanbul Bomonti at $330/2 nights*
-
-> **You:** "Show me the details and photos"
->
-> **AI:** *Uses `get_data_hotel` → shows amenities, spa, rooftop lounge, Bosphorus views*
-
-> **You:** "Book it. My name is Ahmed Negm, email ahmed@example.com"
->
-> **AI:** *Uses `post_rates_prebook` → locks the rate → Uses `post_rates_book` → confirms reservation*
-
----
-
-## 🔒 Security
-
-- **No API keys required** — the endpoint is public and ready to use
-- **SSL/TLS encrypted** — all traffic runs through Cloudflare's edge network
-- **Rate limited** — 500 requests/second to prevent abuse
-- **No data storage** — MAQAMI proxies requests to the booking engine; no user data is stored
-
----
-
-## 🌐 Coverage
-
-- **249 countries** worldwide
-- **3M+ hotels** across all major chains and independents
-- **Real-time pricing** from multiple suppliers
-- **Multi-currency** support (USD, EUR, GBP, SAR, AED, and more)
-
----
-
-## Complete Tool List
-
-<details>
-<summary><strong>All 65 tools (click to expand)</strong></summary>
-
-### Hotel & Rates
-- `get_data_hotel` — Hotel details
-- `get_data_hotel_search` — Semantic hotel search
-- `get_data_hotel_ask` — AI hotel Q&A
-- `get_data_hotels` — List hotels by city
-- `get_data_hotels_room_search` — Room search
-- `get_data_hotels_semantic_search` — Semantic search
-- `post_hotels_rates` — Live pricing & availability
-- `post_hotels_min_rates` — Minimum rates
-- `post_rates_prebook` — Step 1: Prebook
-- `post_rates_book` — Step 2: Book
-- `get_prebooks_prebookid` — Prebook details
-
-### Bookings Management
-- `get_bookings` — List all bookings
-- `get_bookings_bookingid` — Booking details
-- `listBookings` — List bookings
-- `searchBookings` — Search bookings
-- `put_bookings_bookingid` — Update booking
-- `put_bookings_bookingid_amend` — Amend booking
-- `post_bookings_bookingid_alternative_prebooks` — Alternative prebooks
-
-### Flights
-- `post_flights_rates` — Flight rates
-- `post_flights_prebooks` — Prebook flights
-- `post_flights_bookings` — Book flights
-- `post_flights_verify` — Verify flights
-- `get_flights_bookings_bookingid` — Flight booking details
-- `get_data_flights_airlines` — Airlines data
-- `get_data_flights_airlines_iatas` — Airline IATA codes
-- `get_data_flights_airlines_iatas_iatacode` — Airline by IATA
-- `get_data_flights_airports` — Airports data
-- `get_data_flights_airports_iatas` — Airport IATA codes
-- `get_data_flights_airports_iatas_iatacode` — Airport by IATA
-
-### Data & Reference
-- `get_data_places` — Place search
-- `get_data_places_placeid` — Place details
-- `get_data_countries` — Countries
-- `get_data_cities` — Cities
-- `get_data_currencies` — Currencies
-- `get_data_chains` — Hotel chains
-- `get_data_facilities` — Facilities
-- `get_data_hoteltypes` — Hotel types
-- `get_data_iatacodes` — IATA codes
-- `get_data_languages` — Languages
-- `get_data_reviews` — Reviews
-- `get_data_weather` — Weather data
-- `getPriceIndexCity` — City price index
-- `getPriceIndexHotels` — Hotel price index
-
-### Guests & Loyalty
-- `get_guests` — List guests
-- `get_guests_guestid` — Guest details
-- `get_guests_guestid_bookings` — Guest bookings
-- `get_guests_guestid_loyalty_points` — Loyalty points
-- `get_guests_guestid_vouchers` — Guest vouchers
-- `post_guests_guestid_loyalty_points_redeem` — Redeem points
-- `get_loyalties` — Loyalty programs
-- `put_loyalties` — Update loyalty
-
-### Vouchers
-- `get_vouchers` — List vouchers
-- `get_vouchers_voucherid` — Voucher details
-- `get_vouchers_history` — Voucher history
-- `post_vouchers` — Create voucher
-- `put_vouchers_id` — Update voucher
-- `put_vouchers_id_status` — Update voucher status
-- `delete_Voucher` — Delete voucher
-
-### Analytics & Reports
-- `post_analytics_hotels` — Hotel analytics
-- `post_analytics_markets` — Market analytics
-- `post_analytics_report` — Analytics report
-- `post_analytics_weekly` — Weekly analytics
-- `post_commissions_report` — Commission report
-- `get_bookings_guest_nationality_report` — Nationality report
-- `get_bookings_hotels_sales_report` — Sales report
-- `get_bookings_source_markets_report` — Source markets
-
-### Supply
-- `get_supply_customization` — Supply settings
-- `put_supply_customization` — Update supply
-- `post_flights_prebooks_prebookid_services` — Flight services
-
-</details>
-
----
-
-## 📖 Resources
-
-- **Website:** [maqami.co](https://maqami.co)
-- **MCP Endpoint:** [mcp.maqami.co](https://mcp.maqami.co)
-- **AI Discovery:** [maqami.co/.well-known/mcp.json](https://maqami.co/.well-known/mcp.json)
-- **LLMs.txt:** [maqami.co/llms.txt](https://maqami.co/llms.txt)
-
----
-
-## 📝 License
-
-MIT — use freely in any project. See [LICENSE](LICENSE).
-
----
-
-<div align="center">
-
-**Built by [MAQAMI](https://maqami.co)** · Secured by Cloudflare
-
-</div>
+Contact: info@maqami.co
