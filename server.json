@@ -1,10 +1,14 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.negm17111995/maqami-travel",
-  "version": "1.0.6",
   "title": "MAQAMI Travel",
-  "description": "Official MCP server for MAQAMI with 3M+ hotels. Search hotels, flights, prebook and book.",
+  "description": "Official MCP server for MAQAMI, a hotel and flight booking platform with 3M+ hotels.",
+  "version": "1.0.6",
   "websiteUrl": "https://mcp.maqami.co/",
+  "repository": {
+    "url": "https://github.com/negm17111995/mcp-server",
+    "source": "github"
+  },
   "remotes": [
     {
       "type": "streamable-http",
@@ -14,7 +18,9 @@
   "packages": [
     {
       "registryType": "npm",
+      "registryBaseUrl": "https://registry.npmjs.org",
       "identifier": "maqami-travel",
+      "version": "1.0.6",
       "transport": {
         "type": "stdio"
       }
