@@ -127,6 +127,14 @@ url = "https://mcp.maqami.co/"
 
 ### Gemini CLI
 
+Install the extension, which adds the server and its context file:
+
+```bash
+gemini extensions install https://github.com/negm17111995/mcp-server
+```
+
+Or add only the server:
+
 ```bash
 gemini mcp add --transport http maqami-travel https://mcp.maqami.co/
 ```

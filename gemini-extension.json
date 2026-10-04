@@ -1,0 +1,11 @@
+{
+  "name": "maqami-travel",
+  "version": "1.0.6",
+  "description": "Official MCP server for MAQAMI, a hotel and flight booking platform with 3M+ hotels.",
+  "mcpServers": {
+    "maqami-travel": {
+      "httpUrl": "https://mcp.maqami.co/"
+    }
+  },
+  "contextFileName": "GEMINI.md"
+}
