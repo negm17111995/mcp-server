@@ -220,6 +220,7 @@ This works in `claude_desktop_config.json` and any other client that launches st
 - All traffic to `https://mcp.maqami.co/` is encrypted over HTTPS.
 - Searches and bookings are processed by MAQAMI. Guest and payment details you provide for a booking are handled according to the policies published at [maqami.co](https://maqami.co).
 - Booking creates a real reservation. Review the details and final price before confirming.
+- Privacy policy: [maqami.co/privacy-policy](https://maqami.co/privacy-policy/)
 
 ## Development
 
