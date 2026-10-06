@@ -198,6 +198,10 @@ For clients that only support stdio servers, the `maqami-travel` npm package is 
 
 This works in `claude_desktop_config.json` and any other client that launches stdio servers.
 
+## Examples
+
+[negm17111995/travel-agent-examples](https://github.com/negm17111995/travel-agent-examples) has small, runnable travel assistants that connect to this server from the OpenAI Agents SDK (Python), LangChain with LangGraph (Python) and the Vercel AI SDK (TypeScript). Each one asks for your approval before any prebook or book call.
+
 ## What you can do
 
 - **Search hotels** with live rates and availability.
