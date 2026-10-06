@@ -4,6 +4,8 @@ All notable changes to the `maqami-travel` npm package, registry metadata and do
 
 ## [Unreleased]
 
+## [1.0.7] - 2026-10-06
+
 ### Added
 - Documentation only: quick start table, agent booking flow and FAQ in the README, `AGENTS.md`, `llms.txt`, `SECURITY.md`, `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, issue forms and `CITATION.cff`. No changes to `index.js` or the hosted server.
 
