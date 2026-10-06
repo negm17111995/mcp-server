@@ -76,8 +76,8 @@ The booking tools support a Stripe payment intent, which keeps card details off 
 
 - The `secretKey` is the Stripe client secret. The user completes payment on a secure Stripe payment page that uses it. Do not paste the secret into the chat or pass it to any other tool.
 - Call the booking or charge tool only after the user says the payment on the secure page is done. If a payment or booking call fails, say so and do not retry without asking.
-- These tools do not return a checkout link. If your client cannot open a secure Stripe payment page for the user, stop before booking and send the user to the MAQAMI checkout at https://book.maqami.co/ to finish the booking there.
-- `post_rates_book` (`ACC_CREDIT_CARD`, `CREDIT_CARD`) and `post_flights_bookings` (`CREDIT_CARD` with `billingInfo`) also accept raw card fields. Those are meant for a PCI-compliant payment endpoint, not for chat. Do not use these methods, and do not collect card numbers, security codes or expiry dates for them. Send the user to https://book.maqami.co/ instead.
+- These tools do not return a checkout link. If your client cannot open a secure Stripe payment page for the user, stop before booking and direct the user to finish the booking in the MAQAMI checkout (https://book.maqami.co/).
+- `post_rates_book` (`ACC_CREDIT_CARD`, `CREDIT_CARD`) and `post_flights_bookings` (`CREDIT_CARD` with `billingInfo`) also accept raw card fields. Those are meant for a PCI-compliant payment endpoint, not for chat. Do not use these methods, and do not collect card numbers, security codes or expiry dates for them. Direct the user to the MAQAMI checkout (https://book.maqami.co/) instead.
 - `CREDIT` and `WALLET` bill the connected account's credit line or wallet rather than a card. Use them only when the user says that is how their account pays.
 - `post_rates_rebook` takes no payment (the method is forced to `NONE`). Any price difference from the original booking is settled separately, so tell the user that before they confirm.
 
