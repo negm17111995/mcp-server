@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Questions and ideas
+    url: https://github.com/negm17111995/mcp-server/discussions
+    about: Ask setup questions or suggest features in Discussions.
+  - name: Report a security issue
+    url: https://github.com/negm17111995/mcp-server/security/advisories/new
+    about: Report vulnerabilities privately. Please don't open a public issue.
+  - name: Booking support
+    url: https://maqami.co
+    about: For help with an existing reservation, contact MAQAMI through the website.

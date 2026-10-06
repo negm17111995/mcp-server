@@ -1,0 +1,21 @@
+cff-version: 1.2.0
+message: "If you reference this software, please cite it using these metadata."
+title: "MAQAMI Travel MCP Server"
+abstract: "Hosted Model Context Protocol (MCP) server for searching, prebooking and booking hotels and flights on MAQAMI, with an npm stdio bridge."
+type: software
+authors:
+  - name: "MAQAMI LLC"
+    website: "https://maqami.co"
+    email: "info@maqami.co"
+repository-code: "https://github.com/negm17111995/mcp-server"
+url: "https://mcp.maqami.co/"
+license: MIT
+version: "1.0.6"
+date-released: "2026-10-03"
+keywords:
+  - mcp
+  - model-context-protocol
+  - travel
+  - hotels
+  - flights
+  - ai-agents
