@@ -16,6 +16,8 @@ All notable changes to the `maqami-travel` npm package, registry metadata and do
 - `maqami-travel-booking` skill: Payments section updated for the server's current payment rules. Available methods are `TRANSACTION_ID` (Stripe; `TRANSACTION` for hotels), `CREDIT_CARD` (card details in `billingInfo`, sent through the server's tokenizing card endpoint) and `THIRD_PARTY` (flights, gateway token); `usePaymentSdk` is optional again; `WALLET`, `ACC_CREDIT_CARD` and `CREDIT` are rejected. Stripe (`TRANSACTION_ID`) is the method to use while the supplier answers "payment method unsupported" for `CREDIT_CARD`. The hotel flow now asks for confirmation before `post_rates_prebook`. `GEMINI.md` gains the untrusted-content and no-card-numbers-in-chat rules. Documentation only.
 - `maqami-travel-booking` skill and `GEMINI.md`: hotel prebooks now return a `checkoutUrl` (book.maqami.co checkout for that hold); the hotel payment step tells the agent to give it to the customer to enter guest details and pay. Documentation only.
 
+- Skill, `AGENTS.md`, `GEMINI.md`, `llms.txt` and README: documented flow matches the hardened server. There is no places-search step (search rates by `cityName` with `countryCode`, coordinates, `iataCode`, `hotelIds` or `aiSearch`); hotel `offerId`s are signed and must be passed exactly as returned; rebooking, tour booking, hotel add-ons, places and price-index tools are not available; only the tools in `tools/list` exist. Documentation only.
+
 ### Removed
 - `DIRECTORY-SUBMISSIONS.md` (internal notes).
 

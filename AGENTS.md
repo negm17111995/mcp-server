@@ -37,10 +37,10 @@ For stdio-only clients:
 
 Read the tool list from the server (`tools/list`); it is the source of truth for names and input schemas. The usual flows are:
 
-- **Hotels**: find the destination (`get_data_places`) → search rates (`post_hotels_rates`) → hotel details (`get_data_hotel`, `get_data_reviews`) → prebook (`post_rates_prebook`) → confirm with the user → book (`post_rates_book`).
+- **Hotels**: search rates by city, coordinates, airport, hotel IDs or `aiSearch` (`post_hotels_rates`) → hotel details (`get_data_hotel`, `get_data_reviews`) → confirm with the user → prebook (`post_rates_prebook`) → give the customer the prebook's `checkoutUrl`, or book (`post_rates_book`) from your own secure Stripe form.
 - **Flights**: find airports (`get_data_flights_airports`) → search (`post_flights_rates`) → verify (`post_flights_verify`) → confirm with the user → prebook (`post_flights_prebooks`) → book (`post_flights_bookings`).
 
-Hotel rate searches need `checkin`, `checkout`, `occupancies`, `currency`, `guestNationality` and one location field. Flight searches need `legs` (each with `origin`, `destination` and `date`), `adults` and `currency`.
+Hotel rate searches need `checkin`, `checkout`, `occupancies`, `currency`, `guestNationality` and one location field (`cityName` with `countryCode`, `latitude` and `longitude`, `iataCode`, `hotelIds` or `aiSearch`). There is no places search. Flight searches need `legs` (each with `origin`, `destination` and `date`), `adults` and `currency`.
 
 Recommended behaviour when acting for a user:
 
@@ -48,6 +48,8 @@ Recommended behaviour when acting for a user:
 - Report only prices, availability and policies returned by the tools.
 - Tools without `readOnlyHint: true` change state. Prebook and book create real reservations. Show the user exactly what will be booked, including the final price, and wait for explicit confirmation before calling them.
 - If a price or availability changes at prebook or verify, show the new result and ask again.
+- Pass hotel `offerId`s exactly as the search returned them. The server signs them and rejects changed or rebuilt ones; run the search again if one is rejected.
+- Only the tools in `tools/list` exist; the server rejects other names. Places search, price index, rebooking (`post_rates_rebook`), tour booking and hotel add-ons (`addons`) are not available.
 
 ## Working on this repository
 
