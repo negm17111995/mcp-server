@@ -9,6 +9,9 @@ All notable changes to the `maqami-travel` npm package, registry metadata and do
 
 - Plugin packaging only: `.claude-plugin/marketplace.json` (Claude Code marketplace `maqami`), `.codex-plugin/plugin.json` with `assets/logo-512.png` (Codex plugin), and the `maqami-travel-booking` skill in `skills/`. No changes to `index.js` or the hosted server.
 
+### Changed
+- `maqami-travel-booking` skill: new "Untrusted content" and "Payments" sections, and the confirm-before-booking rules now also cover amend, cancel and extra-charge tools. Documentation only.
+
 ### Removed
 - `DIRECTORY-SUBMISSIONS.md` (internal notes).
 
