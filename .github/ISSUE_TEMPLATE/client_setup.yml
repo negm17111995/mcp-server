@@ -1,0 +1,22 @@
+name: Client setup guide
+description: Suggest setup steps for a client that isn't in the README, or report outdated steps.
+labels: ["documentation"]
+body:
+  - type: input
+    id: client
+    attributes:
+      label: Client and version
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Setup steps or configuration
+      description: The exact steps or config that worked for you.
+      render: markdown
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Anything else?

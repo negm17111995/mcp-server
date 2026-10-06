@@ -1,14 +1,49 @@
 # MAQAMI Travel MCP Server
 
-[![MAQAMI Travel MCP server on Glama](https://glama.ai/mcp/servers/negm17111995/mcp-server/badge)](https://glama.ai/mcp/servers/negm17111995/mcp-server)
+[![Official MCP Registry](https://img.shields.io/badge/MCP_Registry-io.github.negm17111995%2Fmaqami--travel-blue)](https://registry.modelcontextprotocol.io/v0/servers/io.github.negm17111995%2Fmaqami-travel/versions/latest)
 [![npm version](https://img.shields.io/npm/v/maqami-travel)](https://www.npmjs.com/package/maqami-travel)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+[![Transport: Streamable HTTP](https://img.shields.io/badge/transport-Streamable_HTTP-informational)](#other-streamable-http-clients)
+[![MAQAMI Travel MCP server on Glama](https://glama.ai/mcp/servers/negm17111995/mcp-server/badge)](https://glama.ai/mcp/servers/negm17111995/mcp-server)
 
 Official MCP server for MAQAMI, a hotel and flight booking platform with 3M+ hotels. Search live hotel rates and flights, look up places, airports and hotel details, then prebook and book. Remote Streamable HTTP endpoint, no API key required.
 
 ```
 https://mcp.maqami.co/
 ```
+
+## Quick start
+
+Pick your client. Each line is enough to connect; the full steps are under [Connect](#connect).
+
+| Client | Fastest way to connect |
+| --- | --- |
+| Claude Code | `claude mcp add --transport http maqami-travel https://mcp.maqami.co/` |
+| Claude Desktop and claude.ai | **Customize → Connectors → Add custom connector**, URL `https://mcp.maqami.co/`, **No sign in** ([steps](#claude-claudeai-and-claude-desktop)) |
+| Cursor | Add `"maqami-travel": { "url": "https://mcp.maqami.co/" }` to `mcp.json`, or use the [one-click link](#cursor) |
+| VS Code | `code --add-mcp '{"name":"maqami-travel","type":"http","url":"https://mcp.maqami.co/"}'` |
+| Windsurf | Add `"maqami-travel": { "serverUrl": "https://mcp.maqami.co/" }` to `mcp_config.json` |
+| Gemini CLI | `gemini extensions install https://github.com/negm17111995/mcp-server` |
+| OpenAI Codex | `codex mcp add maqami-travel --url https://mcp.maqami.co/` |
+| ChatGPT | Developer mode → create an app with URL `https://mcp.maqami.co/` and **No Authentication** ([steps](#chatgpt)) |
+| OpenAI Agents SDK | `MCPServerStreamableHttp(name="MAQAMI Travel", params={"url": "https://mcp.maqami.co/"})` |
+| LangChain | `MCPAdapter("https://mcp.maqami.co/")` from `langchain.mcp` ([example](#langchain-python)) |
+| n8n | **MCP Client Tool** node, endpoint `https://mcp.maqami.co/`, HTTP Streamable, no authentication ([steps](#n8n)) |
+| Cline | **MCP Servers → Remote Servers**, URL `https://mcp.maqami.co/`, Streamable HTTP |
+| Any other client | Streamable HTTP at `https://mcp.maqami.co/` with no auth, or `npx -y maqami-travel` for stdio-only clients |
+
+Then try: *"Find 4-star hotels in Lisbon for 2 adults, 12 to 15 May."*
+
+## Contents
+
+- [Connect](#connect)
+- [How agents use the server](#how-agents-use-the-server)
+- [What you can do](#what-you-can-do)
+- [Example prompts](#example-prompts)
+- [FAQ](#faq)
+- [Examples](#examples)
+- [Privacy and security](#privacy-and-security)
+- [Development](#development)
 
 ## Connect
 
@@ -173,6 +208,39 @@ async def main() -> None:
 asyncio.run(main())
 ```
 
+### LangChain (Python)
+
+LangChain 1.x includes MCP support in `langchain.mcp` (beta). Install with `pip install langchain langchain-openai`:
+
+```python
+import asyncio
+
+from langchain.agents import create_agent
+from langchain.mcp import MCPAdapter
+
+
+async def main() -> None:
+    async with MCPAdapter("https://mcp.maqami.co/") as maqami:
+        tools = await maqami.list_tools()
+        agent = create_agent("openai:gpt-5.4-mini", tools)
+        result = await agent.ainvoke(
+            {"messages": [{"role": "user", "content": "Which airports serve Tokyo?"}]}
+        )
+        print(result["messages"][-1].content)
+
+
+asyncio.run(main())
+```
+
+For a version that asks for your approval before prebook or book, see [travel-agent-examples/langchain-python](https://github.com/negm17111995/travel-agent-examples/tree/main/langchain-python).
+
+### n8n
+
+1. Add an **AI Agent** node to your workflow.
+2. Under **Tools**, add an **MCP Client Tool** node.
+3. Set the endpoint to `https://mcp.maqami.co/`, choose **HTTP Streamable** as the server transport (if your n8n version shows the option) and **None** for authentication.
+4. Under **Tools to Include**, pick the tools your workflow needs, or keep **All**.
+
 ### Other Streamable HTTP clients
 
 | Setting   | Value                    |
@@ -197,6 +265,70 @@ For clients that only support stdio servers, the `maqami-travel` npm package is 
 ```
 
 This works in `claude_desktop_config.json` and any other client that launches stdio servers.
+
+## How agents use the server
+
+The server is a standard MCP server. Every tool has a JSON Schema for its inputs and MCP annotations, so clients can tell read-only tools (`readOnlyHint: true`) from tools that change something.
+
+### Hotel booking flow
+
+| Step | What happens | Tool (example) |
+| --- | --- | --- |
+| 1. Find the destination | Resolve a city, area or landmark to a place ID, or find hotels by name | `get_data_places`, `get_data_hotels`, `get_data_hotel_search` |
+| 2. Search rates | Live rates for the dates and guests. Needs `checkin`, `checkout`, `occupancies`, `currency`, `guestNationality` and one location field (`placeId`, `cityName` with `countryCode`, `hotelIds`, coordinates, `iataCode` or `aiSearch`). Each rate has an `offerId`. | `post_hotels_rates` |
+| 3. Show details | Description, amenities, photos and reviews for the hotels the user is interested in | `get_data_hotel`, `get_data_reviews` |
+| 4. Prebook | Checks availability for one `offerId` and returns a `prebookId` with the final price and cancellation terms | `post_rates_prebook` |
+| 5. Confirm | Show the user the hotel, room, dates, guests, final price and cancellation terms, and wait for a clear yes | (your agent) |
+| 6. Book | Creates the reservation from the `prebookId` with the holder, guest and payment details | `post_rates_book` |
+
+### Flight booking flow
+
+| Step | What happens | Tool (example) |
+| --- | --- | --- |
+| 1. Find airports | Resolve cities to IATA airport codes | `get_data_flights_airports` |
+| 2. Search flights | Live offers. Needs `legs` (each with `origin`, `destination` and `date`), `adults` and `currency`. One leg for one-way, two for a round trip. | `post_flights_rates` |
+| 3. Verify | Confirms an `offerId` is still available and returns the latest price, baggage and fare rules | `post_flights_verify` |
+| 4. Confirm | Show the user the flights, passengers, final price and fare rules, and wait for a clear yes | (your agent) |
+| 5. Prebook | Starts the booking session with contact and passenger details and returns a `prebookId` | `post_flights_prebooks` |
+| 6. Book | Completes the booking from the `prebookId` with payment details | `post_flights_bookings` |
+
+Tool names and required fields above are as published by the server in October 2026. The tool list your client receives from the server is always the source of truth.
+
+### Good practice for agents
+
+- **Ask for missing inputs** instead of guessing: dates, number of guests, the guest's nationality and the currency for hotels; dates, passengers and currency for flights.
+- **Quote only what the tools return.** Show the price with its currency and the cancellation or fare rules when they are available.
+- **Confirm before anything that is not read-only.** Prebook and book create real reservations, and some booking-management tools change or cancel bookings. Ask the user first and show exactly what will happen.
+- **If a price or availability changes** at prebook or verify, show the new result and ask again.
+- **Keep guest details to what the booking needs**, and only send them once the user has chosen an option.
+
+The [examples](#examples) show one way to do this: read-only tools run automatically and every other tool waits for the user's approval.
+
+## FAQ
+
+**Do I need an API key or an account to connect?**
+No. The endpoint accepts connections without authentication. A booking needs guest and payment details.
+
+**Does booking create a real reservation?**
+Yes. Prebook checks the rate, and book creates the reservation. Always review the details and final price before you confirm.
+
+**Which transport does the server use?**
+Streamable HTTP at `https://mcp.maqami.co/`. If your client only supports stdio, use the [`maqami-travel` npm bridge](#local-stdio-npm).
+
+**My client warns that there are too many tools. What should I do?**
+Turn on only the tools you need. Most clients let you do this: the tool picker in VS Code, per-tool toggles in Cursor and Claude, and **Tools to Include** in n8n. For a travel assistant, the search, details, prebook and book tools in the tables above are a good start.
+
+**What does the server see?**
+An MCP server receives only the tool calls and arguments your client sends. It does not see the rest of your conversation.
+
+**Where is the server listed?**
+In the official MCP Registry as `io.github.negm17111995/maqami-travel`, and on npm as `maqami-travel`. This repository is also a Gemini CLI extension (`gemini-extension.json`), a Claude Code plugin (`.claude-plugin/plugin.json`) and an Agent Plugins package (`plugin.json` and `mcp.json`).
+
+**Can I use it in my own agent or product?**
+Yes, it's a public endpoint. Please follow the confirmation guidance above. For partnerships, contact [info@maqami.co](mailto:info@maqami.co).
+
+**How do I report a bug or a security issue?**
+Open an [issue](https://github.com/negm17111995/mcp-server/issues) for bugs and client setup problems. For security issues, follow [SECURITY.md](SECURITY.md) and don't open a public issue.
 
 ## Examples
 
@@ -236,6 +368,22 @@ npm test
 ```
 
 The tests start a local mock Streamable HTTP server and point the bridge at it with the `MAQAMI_MCP_URL` environment variable. That variable exists for testing only; by default the bridge connects to `https://mcp.maqami.co/`.
+
+### Repository layout
+
+| File | Purpose |
+| --- | --- |
+| `index.js` | npm stdio bridge to the hosted endpoint |
+| `server.json` | Official MCP Registry entry |
+| `gemini-extension.json`, `GEMINI.md` | Gemini CLI extension and its context file |
+| `.claude-plugin/plugin.json`, `.mcp.json` | Claude Code plugin |
+| `plugin.json`, `mcp.json` | Agent Plugins manifest |
+| `glama.json` | Glama directory metadata |
+| `AGENTS.md`, `llms.txt` | Short guides for coding agents and LLM tools |
+
+## Contributing
+
+Documentation fixes, client setup guides and bug reports are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) and the [Code of Conduct](CODE_OF_CONDUCT.md). Questions and ideas go to [Discussions](https://github.com/negm17111995/mcp-server/discussions).
 
 ## License
 

@@ -1,8 +1,16 @@
 # Changelog
 
-All notable changes to the `maqami-travel` npm package and registry metadata.
+All notable changes to the `maqami-travel` npm package, registry metadata and documentation.
 
-## [1.0.6] - Unreleased
+## [Unreleased]
+
+### Added
+- Documentation only: quick start table, agent booking flow and FAQ in the README, `AGENTS.md`, `llms.txt`, `SECURITY.md`, `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, issue forms and `CITATION.cff`. No changes to `index.js` or the hosted server.
+
+### Removed
+- `DIRECTORY-SUBMISSIONS.md` (internal notes).
+
+## [1.0.6] - 2026-10-03
 
 ### Changed
 - `index.js` is now a stdio-to-Streamable-HTTP bridge built on the official MCP SDK client. It performs the full `initialize` handshake with `https://mcp.maqami.co/`, keeps the `Mcp-Session-Id`, and forwards tools, resources and prompts.
