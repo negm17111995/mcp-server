@@ -19,13 +19,14 @@ Pick your client. Each line is enough to connect; the full steps are under [Conn
 | Client | Fastest way to connect |
 | --- | --- |
 | Claude Code | `claude mcp add --transport http maqami-travel https://mcp.maqami.co/` |
-| Claude Desktop and claude.ai | **Customize → Connectors → Add custom connector**, URL `https://mcp.maqami.co/`, **No sign in** ([steps](#claude-claudeai-and-claude-desktop)) |
+| Claude Desktop (one click) | Download [`maqami-travel.mcpb`](https://github.com/negm17111995/mcp-server/releases/latest/download/maqami-travel.mcpb) and open it ([steps](#claude-desktop-extension)) |
+| claude.ai, Claude Desktop and Claude mobile | **Customize → Connectors → Add custom connector**, URL `https://mcp.maqami.co/`, **No sign in**. Works on the Free plan ([steps](#claude-claudeai-and-claude-desktop)) |
 | Cursor | Add `"maqami-travel": { "url": "https://mcp.maqami.co/" }` to `mcp.json`, or use the [one-click link](#cursor) |
 | VS Code | `code --add-mcp '{"name":"maqami-travel","type":"http","url":"https://mcp.maqami.co/"}'` |
 | Windsurf | Add `"maqami-travel": { "serverUrl": "https://mcp.maqami.co/" }` to `mcp_config.json` |
 | Gemini CLI | `gemini extensions install https://github.com/negm17111995/mcp-server` |
 | OpenAI Codex | `codex mcp add maqami-travel --url https://mcp.maqami.co/` |
-| ChatGPT | Developer mode → create an app with URL `https://mcp.maqami.co/` and **No Authentication** ([steps](#chatgpt)) |
+| ChatGPT | Developer mode → create an app with URL `https://mcp.maqami.co/` and **No Authentication** ([steps and plans](#chatgpt)) |
 | OpenAI Agents SDK | `MCPServerStreamableHttp(name="MAQAMI Travel", params={"url": "https://mcp.maqami.co/"})` |
 | LangChain | `MCPAdapter("https://mcp.maqami.co/")` from `langchain.mcp` ([example](#langchain-python)) |
 | n8n | **MCP Client Tool** node, endpoint `https://mcp.maqami.co/`, HTTP Streamable, no authentication ([steps](#n8n)) |
@@ -60,7 +61,19 @@ Add MAQAMI as a custom connector:
 3. Enter the name `MAQAMI Travel` and the URL `https://mcp.maqami.co/`, then click **Continue**.
 4. Under **Authentication**, choose **No sign in**, then click **Add**.
 
+This works on every Claude plan, including Free. Free accounts can have one custom connector at a time.
+
 On Team and Enterprise plans, an Owner adds the connector under **Organization settings → Connectors** first.
+
+### Claude Desktop extension
+
+A one-click install for Claude Desktop on macOS, Windows and Linux. It doesn't use a custom connector slot, so it also suits Free accounts that already have one.
+
+1. Download [`maqami-travel.mcpb`](https://github.com/negm17111995/mcp-server/releases/latest/download/maqami-travel.mcpb).
+2. Open the file, or drag it into Claude Desktop under **Settings → Extensions**.
+3. Click **Install**.
+
+The extension runs the same stdio bridge as the npm package and connects to `https://mcp.maqami.co/`. Claude Desktop provides Node.js, so there is nothing else to install.
 
 ### Claude Code
 
@@ -171,7 +184,7 @@ On current releases the file is at `~/.config/devin/mcp_config.json` (macOS and 
 
 ### ChatGPT
 
-Custom MCP apps are available on the web for Plus, Pro, Business, Enterprise and Education accounts.
+Developer mode apps are available on the web for Plus, Pro, Business, Enterprise and Education accounts. On the Free plan, ChatGPT shows only apps published in its app directory.
 
 1. Open **Settings → Security and login** and turn on **Developer mode**.
 2. Open **Plugins**, select the **+** button and create a developer-mode app.
@@ -361,7 +374,7 @@ Turn on only the tools you need. Most clients let you do this: the tool picker i
 An MCP server receives only the tool calls and arguments your client sends. It does not see the rest of your conversation.
 
 **Where is the server listed?**
-In the official MCP Registry as `io.github.negm17111995/maqami-travel`, and on npm as `maqami-travel`. This repository is also a Gemini CLI extension (`gemini-extension.json`), a Claude Code plugin and marketplace (`.claude-plugin/`), a Codex plugin (`.codex-plugin/plugin.json`) and an Agent Plugins package (`plugin.json` and `mcp.json`). The plugins bundle the `maqami-travel-booking` skill.
+In the official MCP Registry as `io.github.negm17111995/maqami-travel`, and on npm as `maqami-travel`. It is also a Claude Desktop extension ([`maqami-travel.mcpb`](https://github.com/negm17111995/mcp-server/releases/latest/download/maqami-travel.mcpb)). This repository is also a Gemini CLI extension (`gemini-extension.json`), a Claude Code plugin and marketplace (`.claude-plugin/`), a Codex plugin (`.codex-plugin/plugin.json`) and an Agent Plugins package (`plugin.json` and `mcp.json`). The plugins bundle the `maqami-travel-booking` skill.
 
 **Can I use it in my own agent or product?**
 Yes, it's a public endpoint. Please follow the confirmation guidance above. For partnerships, contact [info@maqami.co](mailto:info@maqami.co).
@@ -420,6 +433,7 @@ The tests start a local mock Streamable HTTP server and point the bridge at it w
 | `.claude-plugin/marketplace.json` | Claude Code plugin marketplace (`maqami`) |
 | `.codex-plugin/plugin.json`, `assets/logo-512.png` | Codex plugin and its icon |
 | `plugin.json`, `mcp.json` | Agent Plugins manifest |
+| `mcpb/manifest.json`, `scripts/build-mcpb.sh` | Claude Desktop extension (`npm run build:mcpb` writes `dist/maqami-travel.mcpb`) |
 | `skills/maqami-travel-booking/SKILL.md` | Booking skill bundled with the plugins |
 | `glama.json` | Glama directory metadata |
 | `AGENTS.md`, `llms.txt` | Short guides for coding agents and LLM tools |

@@ -4,6 +4,9 @@ All notable changes to the `maqami-travel` npm package, registry metadata and do
 
 ## [Unreleased]
 
+### Added
+- Claude Desktop extension: `mcpb/manifest.json` and `scripts/build-mcpb.sh` (`npm run build:mcpb`) build `maqami-travel.mcpb`, which wraps the 1.0.7 stdio bridge. It is attached to the latest GitHub release. README: one-click Claude Desktop install, and which ChatGPT and Claude plans can connect. No changes to `index.js` or the hosted server.
+
 ## [1.0.7] - 2026-10-06
 
 ### Added

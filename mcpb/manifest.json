@@ -1,0 +1,220 @@
+{
+  "manifest_version": "0.3",
+  "name": "maqami-travel",
+  "display_name": "MAQAMI Travel",
+  "version": "1.0.7",
+  "description": "Search hotels and flights on MAQAMI and get a secure checkout link on book.maqami.co.",
+  "long_description": "Official MAQAMI extension. Search 3M+ hotels and global flights at wholesale rates, read hotel details and reviews, and get a secure checkout link on book.maqami.co for the room or fare you choose. You review the price, pay and get your confirmation on book.maqami.co; payment is never taken in the chat. You can also look up, amend or cancel an existing hotel, flight or tour booking with its booking ID and email. No account or API key needed.",
+  "author": {
+    "name": "MAQAMI",
+    "email": "info@maqami.co",
+    "url": "https://maqami.co"
+  },
+  "homepage": "https://maqami.co",
+  "documentation": "https://github.com/negm17111995/mcp-server#readme",
+  "support": "https://github.com/negm17111995/mcp-server/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/negm17111995/mcp-server.git"
+  },
+  "icon": "icon.png",
+  "server": {
+    "type": "node",
+    "entry_point": "index.js",
+    "mcp_config": {
+      "command": "node",
+      "args": [
+        "${__dirname}/index.js"
+      ],
+      "env": {}
+    }
+  },
+  "tools": [
+    {
+      "name": "post_hotels_rates",
+      "description": "Search hotel rates"
+    },
+    {
+      "name": "post_hotels_min_rates",
+      "description": "Get lowest hotel prices"
+    },
+    {
+      "name": "get_prebooks_prebookid",
+      "description": "Get locked hotel rate"
+    },
+    {
+      "name": "post_rates_prebook",
+      "description": "Lock hotel rate and get checkout link"
+    },
+    {
+      "name": "listBookings",
+      "description": "List hotel bookings"
+    },
+    {
+      "name": "get_bookings_bookingid",
+      "description": "Get hotel booking"
+    },
+    {
+      "name": "cancel_hotel_booking",
+      "description": "Cancel hotel booking"
+    },
+    {
+      "name": "put_bookings_bookingid_amend",
+      "description": "Amend hotel booking"
+    },
+    {
+      "name": "post_bookings_bookingid_alternative_prebooks",
+      "description": "Find alternative hotel rates"
+    },
+    {
+      "name": "getHotelTaxSchema",
+      "description": "Get hotel tax rules"
+    },
+    {
+      "name": "get_data_hotels",
+      "description": "List hotels"
+    },
+    {
+      "name": "get_data_hotels_semantic_search",
+      "description": "Search hotels by description"
+    },
+    {
+      "name": "get_data_hotel_ask",
+      "description": "Ask about a hotel"
+    },
+    {
+      "name": "post_data_hotel_highlights",
+      "description": "Get hotel highlights"
+    },
+    {
+      "name": "get_data_hotels_room_search",
+      "description": "Search hotel rooms by style"
+    },
+    {
+      "name": "get_data_hotel",
+      "description": "Get hotel details"
+    },
+    {
+      "name": "get_data_reviews",
+      "description": "Get hotel reviews"
+    },
+    {
+      "name": "get_data_cities",
+      "description": "List cities"
+    },
+    {
+      "name": "get_data_countries",
+      "description": "List countries"
+    },
+    {
+      "name": "get_data_currencies",
+      "description": "List currencies"
+    },
+    {
+      "name": "get_data_iatacodes",
+      "description": "List IATA codes"
+    },
+    {
+      "name": "get_data_facilities",
+      "description": "List hotel facilities"
+    },
+    {
+      "name": "get_data_hoteltypes",
+      "description": "List hotel types"
+    },
+    {
+      "name": "get_data_chains",
+      "description": "List hotel chains"
+    },
+    {
+      "name": "get_data_languages",
+      "description": "List languages"
+    },
+    {
+      "name": "get_data_hotel_search",
+      "description": "Find hotels by name or place"
+    },
+    {
+      "name": "get_data_flights_airlines_iatas_iatacode",
+      "description": "Get airline by IATA code"
+    },
+    {
+      "name": "get_data_flights_airports_iatas_iatacode",
+      "description": "Get airport by IATA code"
+    },
+    {
+      "name": "get_data_flights_airports_iatas",
+      "description": "List airport IATA codes"
+    },
+    {
+      "name": "post_flights_rates",
+      "description": "Search flights"
+    },
+    {
+      "name": "post_flights_verify",
+      "description": "Confirm flight price and get checkout link"
+    },
+    {
+      "name": "get_flights_bookings_bookingid",
+      "description": "Get flight booking"
+    },
+    {
+      "name": "get_flights_bookings_bookingid_services",
+      "description": "Get flight booking extras"
+    },
+    {
+      "name": "get_flights_bookings_bookingid_cancellations",
+      "description": "Get flight cancellation status"
+    },
+    {
+      "name": "post_flights_bookings_bookingid_cancellations",
+      "description": "Cancel flight booking"
+    },
+    {
+      "name": "get_data_flights_airlines",
+      "description": "List airlines"
+    },
+    {
+      "name": "get_data_flights_airlines_iatas",
+      "description": "List airline IATA codes"
+    },
+    {
+      "name": "get_data_flights_airports",
+      "description": "List airports"
+    },
+    {
+      "name": "getExperienceBooking",
+      "description": "Get tour booking"
+    },
+    {
+      "name": "getExperienceBookingCancelPreview",
+      "description": "Preview tour cancellation"
+    },
+    {
+      "name": "cancelExperienceBooking",
+      "description": "Cancel tour booking"
+    }
+  ],
+  "tools_generated": false,
+  "keywords": [
+    "travel",
+    "hotels",
+    "flights",
+    "booking",
+    "maqami"
+  ],
+  "license": "MIT",
+  "privacy_policies": [
+    "https://maqami.co/privacy-policy"
+  ],
+  "compatibility": {
+    "platforms": [
+      "darwin",
+      "win32",
+      "linux"
+    ],
+    "runtimes": {
+      "node": ">=18.0.0"
+    }
+  }
+}
