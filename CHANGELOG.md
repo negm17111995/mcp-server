@@ -7,6 +7,8 @@ All notable changes to the `maqami-travel` npm package, registry metadata and do
 ### Added
 - Documentation only: quick start table, agent booking flow and FAQ in the README, `AGENTS.md`, `llms.txt`, `SECURITY.md`, `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, issue forms and `CITATION.cff`. No changes to `index.js` or the hosted server.
 
+- Plugin packaging only: `.claude-plugin/marketplace.json` (Claude Code marketplace `maqami`), `.codex-plugin/plugin.json` with `assets/logo-512.png` (Codex plugin), and the `maqami-travel-booking` skill in `skills/`. No changes to `index.js` or the hosted server.
+
 ### Removed
 - `DIRECTORY-SUBMISSIONS.md` (internal notes).
 
