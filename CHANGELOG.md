@@ -11,6 +11,7 @@ All notable changes to the `maqami-travel` npm package, registry metadata and do
 
 ### Changed
 - `maqami-travel-booking` skill: new "Untrusted content" and "Payments" sections, and the confirm-before-booking rules now also cover amend, cancel and extra-charge tools. Documentation only.
+- `maqami-travel-booking` skill: Payments section corrected against the live `tools/list` schemas. No tool returns a payment page or checkout link, so the agent pays only through the client's own secure Stripe form or stops after prebook and points the user to book.maqami.co. `ACC_CREDIT_CARD`, `CREDIT` and `WALLET` bill the server's account and are not to be used; `CREDIT_CARD`/`billingInfo` is not for chat; `THIRD_PARTY` documented. Documentation only.
 
 ### Removed
 - `DIRECTORY-SUBMISSIONS.md` (internal notes).
