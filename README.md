@@ -6,7 +6,7 @@
 [![Transport: Streamable HTTP](https://img.shields.io/badge/transport-Streamable_HTTP-informational)](#other-streamable-http-clients)
 [![MAQAMI Travel MCP server on Glama](https://glama.ai/mcp/servers/negm17111995/mcp-server/badge)](https://glama.ai/mcp/servers/negm17111995/mcp-server)
 
-Official MCP server for MAQAMI, a hotel and flight booking platform with 3M+ hotels. Search live hotel rates and flights, look up places, airports and hotel details, then prebook and book. Remote Streamable HTTP endpoint, no API key required.
+Official MCP server for MAQAMI, a hotel and flight booking platform with 3M+ hotels. Search live hotel rates and flights, look up cities, airports and hotel details, then prebook and book. Remote Streamable HTTP endpoint, no API key required.
 
 ```
 https://mcp.maqami.co/
@@ -304,12 +304,11 @@ The server is a standard MCP server. Every tool has a JSON Schema for its inputs
 
 | Step | What happens | Tool (example) |
 | --- | --- | --- |
-| 1. Find the destination | Resolve a city, area or landmark to a place ID, or find hotels by name | `get_data_places`, `get_data_hotels`, `get_data_hotel_search` |
-| 2. Search rates | Live rates for the dates and guests. Needs `checkin`, `checkout`, `occupancies`, `currency`, `guestNationality` and one location field (`placeId`, `cityName` with `countryCode`, `hotelIds`, coordinates, `iataCode` or `aiSearch`). Each rate has an `offerId`. | `post_hotels_rates` |
-| 3. Show details | Description, amenities, photos and reviews for the hotels the user is interested in | `get_data_hotel`, `get_data_reviews` |
-| 4. Prebook | Checks availability for one `offerId` and returns a `prebookId` with the final price and cancellation terms | `post_rates_prebook` |
-| 5. Confirm | Show the user the hotel, room, dates, guests, final price and cancellation terms, and wait for a clear yes | (your agent) |
-| 6. Book | Creates the reservation from the `prebookId` with the holder, guest and payment details | `post_rates_book` |
+| 1. Search rates | Live rates for the dates and guests. Needs `checkin`, `checkout`, `occupancies`, `currency`, `guestNationality` and one location field (`cityName` with `countryCode`, `latitude` and `longitude`, `iataCode`, `hotelIds` or `aiSearch`). There is no places search; to find hotels by name, use `get_data_hotels` or `get_data_hotel_search`. Each rate has an `offerId`. | `post_hotels_rates` |
+| 2. Show details | Description, amenities, photos and reviews for the hotels the user is interested in | `get_data_hotel`, `get_data_reviews` |
+| 3. Confirm | Show the user the hotel, room, dates, guests, price and cancellation terms, and wait for a clear yes | (your agent) |
+| 4. Prebook | Checks availability for one `offerId`, passed exactly as the search returned it, and returns a `prebookId` with the final price, the cancellation terms and a `checkoutUrl` | `post_rates_prebook` |
+| 5. Pay | Give the customer the `checkoutUrl` to enter guest details and pay on book.maqami.co. Only a client with its own secure Stripe form books directly from the `prebookId` | `post_rates_book` |
 
 ### Flight booking flow
 
@@ -322,7 +321,14 @@ The server is a standard MCP server. Every tool has a JSON Schema for its inputs
 | 5. Prebook | Starts the booking session with contact and passenger details and returns a `prebookId` | `post_flights_prebooks` |
 | 6. Book | Completes the booking from the `prebookId` with payment details | `post_flights_bookings` |
 
-Tool names and required fields above are as published by the server in October 2026. The tool list your client receives from the server is always the source of truth.
+Tool names and required fields above are as published by the server in October 2026. The tool list your client receives from the server is always the source of truth: only the tools it lists exist, and other tool names are rejected.
+
+### Not available on this server
+
+- Places search (`get_data_places`, `get_data_places_placeid`) and price index tools (`getPriceIndexCity`, `getPriceIndexHotels`, `getPublicPrice`).
+- Rebooking (`post_rates_rebook`), tour booking (`prebookExperienceTour`, `createExperienceBooking`) and hotel add-ons (the `addons` field of `post_rates_prebook`).
+- Price overrides such as `margin`, which the server removes from requests.
+- Hotel `offerId`s are signed by the server. Pass them exactly as returned; a changed or rebuilt `offerId` is rejected, so run the search again.
 
 ### Good practice for agents
 
@@ -368,7 +374,7 @@ Open an [issue](https://github.com/negm17111995/mcp-server/issues) for bugs and 
 
 - **Search hotels** with live rates and availability.
 - **Search flights** and compare fares.
-- **Look up places, airports and hotel details**, including amenities and photos.
+- **Look up cities, airports and hotel details**, including amenities and photos.
 - **Prebook** a hotel or flight rate to confirm price and availability.
 - **Book** the prebooked rate. Booking creates a real reservation and requires guest and payment details.
 
