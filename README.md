@@ -67,6 +67,13 @@ On Team and Enterprise plans, an Owner adds the connector under **Organization s
 claude mcp add --transport http maqami-travel https://mcp.maqami.co/
 ```
 
+Or install the plugin, which adds the server and a booking skill that walks Claude through search, prebook, confirmation and book:
+
+```text
+/plugin marketplace add negm17111995/mcp-server
+/plugin install maqami-travel@maqami
+```
+
 ### Cursor
 
 Add to `~/.cursor/mcp.json` (global) or `.cursor/mcp.json` (project):
@@ -345,7 +352,7 @@ Turn on only the tools you need. Most clients let you do this: the tool picker i
 An MCP server receives only the tool calls and arguments your client sends. It does not see the rest of your conversation.
 
 **Where is the server listed?**
-In the official MCP Registry as `io.github.negm17111995/maqami-travel`, and on npm as `maqami-travel`. This repository is also a Gemini CLI extension (`gemini-extension.json`), a Claude Code plugin (`.claude-plugin/plugin.json`) and an Agent Plugins package (`plugin.json` and `mcp.json`).
+In the official MCP Registry as `io.github.negm17111995/maqami-travel`, and on npm as `maqami-travel`. This repository is also a Gemini CLI extension (`gemini-extension.json`), a Claude Code plugin and marketplace (`.claude-plugin/`), a Codex plugin (`.codex-plugin/plugin.json`) and an Agent Plugins package (`plugin.json` and `mcp.json`). The plugins bundle the `maqami-travel-booking` skill.
 
 **Can I use it in my own agent or product?**
 Yes, it's a public endpoint. Please follow the confirmation guidance above. For partnerships, contact [info@maqami.co](mailto:info@maqami.co).
@@ -400,7 +407,10 @@ The tests start a local mock Streamable HTTP server and point the bridge at it w
 | `server.json` | Official MCP Registry entry |
 | `gemini-extension.json`, `GEMINI.md` | Gemini CLI extension and its context file |
 | `.claude-plugin/plugin.json`, `.mcp.json` | Claude Code plugin |
+| `.claude-plugin/marketplace.json` | Claude Code plugin marketplace (`maqami`) |
+| `.codex-plugin/plugin.json`, `assets/logo-512.png` | Codex plugin and its icon |
 | `plugin.json`, `mcp.json` | Agent Plugins manifest |
+| `skills/maqami-travel-booking/SKILL.md` | Booking skill bundled with the plugins |
 | `glama.json` | Glama directory metadata |
 | `AGENTS.md`, `llms.txt` | Short guides for coding agents and LLM tools |
 
