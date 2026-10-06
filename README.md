@@ -31,6 +31,7 @@ Pick your client. Each line is enough to connect; the full steps are under [Conn
 | n8n | **MCP Client Tool** node, endpoint `https://mcp.maqami.co/`, HTTP Streamable, no authentication ([steps](#n8n)) |
 | Cline | **MCP Servers → Remote Servers**, URL `https://mcp.maqami.co/`, Streamable HTTP |
 | LM Studio | Add `"maqami-travel": { "url": "https://mcp.maqami.co/" }` to `mcp.json`, or use the [install link](#lm-studio) |
+| Booking skill only (Claude Code, Codex, Cursor and other skill-aware agents) | `npx skills add negm17111995/mcp-server` |
 | Any other client | Streamable HTTP at `https://mcp.maqami.co/` with no auth, or `npx -y maqami-travel` for stdio-only clients |
 
 Then try: *"Find 4-star hotels in Lisbon for 2 adults, 12 to 15 May."*
