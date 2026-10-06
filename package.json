@@ -11,7 +11,8 @@
     "index.js"
   ],
   "scripts": {
-    "test": "node --test test/bridge.test.js"
+    "test": "node --test test/bridge.test.js",
+    "build:mcpb": "bash scripts/build-mcpb.sh"
   },
   "keywords": [
     "mcp",
