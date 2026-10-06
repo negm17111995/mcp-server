@@ -30,6 +30,7 @@ Pick your client. Each line is enough to connect; the full steps are under [Conn
 | LangChain | `MCPAdapter("https://mcp.maqami.co/")` from `langchain.mcp` ([example](#langchain-python)) |
 | n8n | **MCP Client Tool** node, endpoint `https://mcp.maqami.co/`, HTTP Streamable, no authentication ([steps](#n8n)) |
 | Cline | **MCP Servers → Remote Servers**, URL `https://mcp.maqami.co/`, Streamable HTTP |
+| LM Studio | Add `"maqami-travel": { "url": "https://mcp.maqami.co/" }` to `mcp.json`, or use the [install link](#lm-studio) |
 | Any other client | Streamable HTTP at `https://mcp.maqami.co/` with no auth, or `npx -y maqami-travel` for stdio-only clients |
 
 Then try: *"Find 4-star hotels in Lisbon for 2 adults, 12 to 15 May."*
@@ -121,6 +122,28 @@ In the Cline panel, open **MCP Servers → Remote Servers**, enter the URL `http
   }
 }
 ```
+
+### LM Studio
+
+LM Studio 0.3.17 and later can use MCP servers. Open the **Program** tab in the right-hand sidebar, choose **Install → Edit mcp.json**, and add:
+
+```json
+{
+  "mcpServers": {
+    "maqami-travel": {
+      "url": "https://mcp.maqami.co/"
+    }
+  }
+}
+```
+
+Or install it by opening this link in your browser:
+
+```text
+lmstudio://add_mcp?name=maqami-travel&config=eyJ1cmwiOiJodHRwczovL21jcC5tYXFhbWkuY28vIn0%3D
+```
+
+Local models have smaller context windows, so consider turning off the tools you don't need (see the [FAQ](#faq)).
 
 ### Windsurf
 
