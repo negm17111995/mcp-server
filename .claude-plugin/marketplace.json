@@ -7,15 +7,15 @@
     "url": "https://maqami.co"
   },
   "metadata": {
-    "description": "Official MAQAMI plugins for Claude Code: hotel and flight search and booking through the MAQAMI Travel MCP server.",
-    "version": "1.0.6"
+    "description": "Official MAQAMI plugins for Claude Code: hotel and flight search with secure checkout on book.maqami.co through the MAQAMI Travel MCP server.",
+    "version": "1.0.7"
   },
   "plugins": [
     {
       "name": "maqami-travel",
       "source": "./",
-      "description": "Official MCP server for MAQAMI, a hotel and flight booking platform with 3M+ hotels. Search hotels and flights, read hotel details, then prebook and book. Remote Streamable HTTP endpoint, no API key required.",
-      "version": "1.0.6",
+      "description": "Official MCP server for MAQAMI, a hotel and flight booking platform with 3M+ hotels. Search hotels and flights, read hotel details, then send the customer a secure checkout link on book.maqami.co. Remote Streamable HTTP endpoint, no API key required.",
+      "version": "1.0.7",
       "author": {
         "name": "MAQAMI",
         "email": "info@maqami.co",

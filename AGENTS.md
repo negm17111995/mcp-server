@@ -4,10 +4,11 @@ Guidance for coding agents and AI assistants that work with this repository or c
 
 ## What this is
 
-- **MAQAMI Travel MCP server**: a hosted MCP server for searching, prebooking and booking hotels and flights on [MAQAMI](https://maqami.co).
+- **MAQAMI Travel MCP server**: a hosted MCP server for searching hotels and flights on [MAQAMI](https://maqami.co) and sending the customer a secure checkout link on book.maqami.co.
 - **Endpoint**: `https://mcp.maqami.co/`
 - **Transport**: Streamable HTTP
-- **Authentication**: none for connecting. A booking needs guest and payment details.
+- **Authentication**: none.
+- **Payment**: only on book.maqami.co. The server never takes payment; no tool accepts payment details.
 - **Registry name**: `io.github.negm17111995/maqami-travel` (official MCP Registry)
 - **npm**: `maqami-travel`, a stdio bridge for clients that cannot use remote servers
 
@@ -37,8 +38,9 @@ For stdio-only clients:
 
 Read the tool list from the server (`tools/list`); it is the source of truth for names and input schemas. The usual flows are:
 
-- **Hotels**: search rates by city, coordinates, airport, hotel IDs or `aiSearch` (`post_hotels_rates`) → hotel details (`get_data_hotel`, `get_data_reviews`) → confirm with the user → prebook (`post_rates_prebook`) → give the customer the prebook's `checkoutUrl`, or book (`post_rates_book`) from your own secure Stripe form.
-- **Flights**: find airports (`get_data_flights_airports`) → search (`post_flights_rates`) → verify (`post_flights_verify`) → confirm with the user → prebook (`post_flights_prebooks`) → book (`post_flights_bookings`).
+- **Hotels**: search rates by city, coordinates, airport, hotel IDs or `aiSearch` (`post_hotels_rates`) → hotel details (`get_data_hotel`, `get_data_reviews`) → confirm with the user → prebook (`post_rates_prebook`) → give the customer the `checkoutUrl` (`https://book.maqami.co/booking?prebookId=...`).
+- **Flights**: find airports (`get_data_flights_airports`) → search (`post_flights_rates`) → confirm with the user → verify (`post_flights_verify`) → give the customer the `checkoutUrl` (`https://book.maqami.co/flights/booking?offerId=...`).
+- **Existing bookings**: lookup, amend and cancel tools (for example `get_bookings_bookingid`, `cancel_hotel_booking`) need the booking ID and the email used to book.
 
 Hotel rate searches need `checkin`, `checkout`, `occupancies`, `currency`, `guestNationality` and one location field (`cityName` with `countryCode`, `latitude` and `longitude`, `iataCode`, `hotelIds` or `aiSearch`). There is no places search. Flight searches need `legs` (each with `origin`, `destination` and `date`), `adults` and `currency`.
 
@@ -46,10 +48,11 @@ Recommended behaviour when acting for a user:
 
 - Ask for missing inputs instead of guessing them.
 - Report only prices, availability and policies returned by the tools.
-- Tools without `readOnlyHint: true` change state. Prebook and book create real reservations. Show the user exactly what will be booked, including the final price, and wait for explicit confirmation before calling them.
+- Tools without `readOnlyHint: true` change state: prebook holds a real rate, and the amend and cancel tools change real bookings. Show the user exactly what will happen, including the final price, and wait for explicit confirmation.
+- Send the customer only a `checkoutUrl` or `searchUrl` on `book.maqami.co` that a tool returned. Never ask for card or passport details in the chat.
 - If a price or availability changes at prebook or verify, show the new result and ask again.
 - Pass hotel `offerId`s exactly as the search returned them. The server signs them and rejects changed or rebuilt ones; run the search again if one is rejected.
-- Only the tools in `tools/list` exist; the server rejects other names. Places search, price index, rebooking (`post_rates_rebook`), tour booking and hotel add-ons (`addons`) are not available.
+- Only the tools in `tools/list` exist; the server rejects other names.
 
 ## Working on this repository
 

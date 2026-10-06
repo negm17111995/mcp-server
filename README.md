@@ -6,7 +6,7 @@
 [![Transport: Streamable HTTP](https://img.shields.io/badge/transport-Streamable_HTTP-informational)](#other-streamable-http-clients)
 [![MAQAMI Travel MCP server on Glama](https://glama.ai/mcp/servers/negm17111995/mcp-server/badge)](https://glama.ai/mcp/servers/negm17111995/mcp-server)
 
-Official MCP server for MAQAMI, a hotel and flight booking platform with 3M+ hotels. Search live hotel rates and flights, look up cities, airports and hotel details, then prebook and book. Remote Streamable HTTP endpoint, no API key required.
+Official MCP server for MAQAMI, a hotel and flight booking platform with 3M+ hotels. Search live hotel rates and flights, look up cities, airports and hotel details, then send the customer a secure checkout link on book.maqami.co for the exact room or fare they chose. Remote Streamable HTTP endpoint, no API key required.
 
 ```
 https://mcp.maqami.co/
@@ -31,6 +31,7 @@ Pick your client. Each line is enough to connect; the full steps are under [Conn
 | n8n | **MCP Client Tool** node, endpoint `https://mcp.maqami.co/`, HTTP Streamable, no authentication ([steps](#n8n)) |
 | Cline | **MCP Servers → Remote Servers**, URL `https://mcp.maqami.co/`, Streamable HTTP |
 | LM Studio | Add `"maqami-travel": { "url": "https://mcp.maqami.co/" }` to `mcp.json`, or use the [install link](#lm-studio) |
+| Booking skill only (Claude Code, Codex, Cursor and other skill-aware agents) | `npx skills add negm17111995/mcp-server` |
 | Any other client | Streamable HTTP at `https://mcp.maqami.co/` with no auth, or `npx -y maqami-travel` for stdio-only clients |
 
 Then try: *"Find 4-star hotels in Lisbon for 2 adults, 12 to 15 May."*
@@ -67,7 +68,7 @@ On Team and Enterprise plans, an Owner adds the connector under **Organization s
 claude mcp add --transport http maqami-travel https://mcp.maqami.co/
 ```
 
-Or install the plugin, which adds the server and a booking skill that walks Claude through search, prebook, confirmation and book:
+Or install the plugin, which adds the server and a booking skill that walks Claude through search, confirmation and the checkout link:
 
 ```text
 /plugin marketplace add negm17111995/mcp-server
@@ -262,7 +263,7 @@ async def main() -> None:
 asyncio.run(main())
 ```
 
-For a version that asks for your approval before prebook or book, see [travel-agent-examples/langchain-python](https://github.com/negm17111995/travel-agent-examples/tree/main/langchain-python).
+For a version that asks for your approval before any prebook, see [travel-agent-examples/langchain-python](https://github.com/negm17111995/travel-agent-examples/tree/main/langchain-python).
 
 ### n8n
 
@@ -300,41 +301,40 @@ This works in `claude_desktop_config.json` and any other client that launches st
 
 The server is a standard MCP server. Every tool has a JSON Schema for its inputs and MCP annotations, so clients can tell read-only tools (`readOnlyHint: true`) from tools that change something.
 
+Customers always book and pay on MAQAMI's website, book.maqami.co. The server finds the hotel or flight, holds the price and returns a `checkoutUrl` for that exact choice; the customer enters guest or passenger details, pays and gets their confirmation there. No tool takes payment or asks for payment details.
+
 ### Hotel booking flow
 
 | Step | What happens | Tool (example) |
 | --- | --- | --- |
-| 1. Search rates | Live rates for the dates and guests. Needs `checkin`, `checkout`, `occupancies`, `currency`, `guestNationality` and one location field (`cityName` with `countryCode`, `latitude` and `longitude`, `iataCode`, `hotelIds` or `aiSearch`). There is no places search; to find hotels by name, use `get_data_hotels` or `get_data_hotel_search`. Each rate has an `offerId`. | `post_hotels_rates` |
+| 1. Search rates | Live rates for the dates and guests. Needs `checkin`, `checkout`, `occupancies`, `currency`, `guestNationality` and one location field (`cityName` with `countryCode`, `latitude` and `longitude`, `iataCode`, `hotelIds` or `aiSearch`). To find hotels by name, use `get_data_hotels` or `get_data_hotel_search`. Each rate has an `offerId`. | `post_hotels_rates` |
 | 2. Show details | Description, amenities, photos and reviews for the hotels the user is interested in | `get_data_hotel`, `get_data_reviews` |
 | 3. Confirm | Show the user the hotel, room, dates, guests, price and cancellation terms, and wait for a clear yes | (your agent) |
-| 4. Prebook | Checks availability for one `offerId`, passed exactly as the search returned it, and returns a `prebookId` with the final price, the cancellation terms and a `checkoutUrl` | `post_rates_prebook` |
-| 5. Pay | Give the customer the `checkoutUrl` to enter guest details and pay on book.maqami.co. Only a client with its own secure Stripe form books directly from the `prebookId` | `post_rates_book` |
+| 4. Prebook | Holds one `offerId`, passed exactly as the search returned it, and returns a `prebookId` with the final price, the cancellation terms and a `checkoutUrl` | `post_rates_prebook` |
+| 5. Checkout | Give the customer the `checkoutUrl` (`https://book.maqami.co/booking?prebookId=...`) to enter guest details and pay | (your agent) |
 
 ### Flight booking flow
 
 | Step | What happens | Tool (example) |
 | --- | --- | --- |
 | 1. Find airports | Resolve cities to IATA airport codes | `get_data_flights_airports` |
-| 2. Search flights | Live offers. Needs `legs` (each with `origin`, `destination` and `date`), `adults` and `currency`. One leg for one-way, two for a round trip. | `post_flights_rates` |
-| 3. Verify | Confirms an `offerId` is still available and returns the latest price, baggage and fare rules | `post_flights_verify` |
+| 2. Search flights | Live offers. Needs `legs` (each with `origin`, `destination` and `date`), `adults` and `currency`. One leg for one-way, two for a round trip. Also returns `searchUrl`, the same search on book.maqami.co. | `post_flights_rates` |
+| 3. Verify | Confirms an `offerId` is still available and returns the latest price, baggage, fare rules and a `checkoutUrl` for that offer | `post_flights_verify` |
 | 4. Confirm | Show the user the flights, passengers, final price and fare rules, and wait for a clear yes | (your agent) |
-| 5. Prebook | Starts the booking session with contact and passenger details and returns a `prebookId` | `post_flights_prebooks` |
-| 6. Book | Completes the booking from the `prebookId` with payment details | `post_flights_bookings` |
+| 5. Checkout | Give the customer the `checkoutUrl` (`https://book.maqami.co/flights/booking?offerId=...`) promptly; the fare is held for a limited time | (your agent) |
 
-Tool names and required fields above are as published by the server in October 2026. The tool list your client receives from the server is always the source of truth: only the tools it lists exist, and other tool names are rejected.
+### Existing bookings
 
-### Not available on this server
+Lookup, amend and cancel tools need the booking ID and the email used to book; the server only returns or changes a booking when both match. Hotel bookings are cancelled with `cancel_hotel_booking`, flights with `post_flights_bookings_bookingid_cancellations` (check `get_flights_bookings_bookingid_cancellations` for the refund estimate first).
 
-- Places search (`get_data_places`, `get_data_places_placeid`) and price index tools (`getPriceIndexCity`, `getPriceIndexHotels`, `getPublicPrice`).
-- Rebooking (`post_rates_rebook`), tour booking (`prebookExperienceTour`, `createExperienceBooking`) and hotel add-ons (the `addons` field of `post_rates_prebook`).
-- Price overrides such as `margin`, which the server removes from requests.
-- Hotel `offerId`s are signed by the server. Pass them exactly as returned; a changed or rebuilt `offerId` is rejected, so run the search again.
+Tool names and required fields above are as published by the server in October 2026. The tool list your client receives from the server is always the source of truth: only the tools it lists exist, and other tool names are rejected. Hotel `offerId`s are signed by the server: pass them exactly as returned, and run the search again if one is rejected.
 
 ### Good practice for agents
 
 - **Ask for missing inputs** instead of guessing: dates, number of guests, the guest's nationality and the currency for hotels; dates, passengers and currency for flights.
 - **Quote only what the tools return.** Show the price with its currency and the cancellation or fare rules when they are available.
-- **Confirm before anything that is not read-only.** Prebook and book create real reservations, and some booking-management tools change or cancel bookings. Ask the user first and show exactly what will happen.
+- **Confirm before anything that is not read-only.** Prebook holds a real rate, and the amend and cancel tools change or cancel real bookings. Ask the user first and show exactly what will happen.
+- **Send only links the tools return.** Give the customer the `checkoutUrl` from prebook or verify, and never ask for card or passport details in the chat.
 - **If a price or availability changes** at prebook or verify, show the new result and ask again.
 - **Keep guest details to what the booking needs**, and only send them once the user has chosen an option.
 
@@ -343,16 +343,19 @@ The [examples](#examples) show one way to do this: read-only tools run automatic
 ## FAQ
 
 **Do I need an API key or an account to connect?**
-No. The endpoint accepts connections without authentication. A booking needs guest and payment details.
+No. The endpoint accepts connections without authentication.
 
-**Does booking create a real reservation?**
-Yes. Prebook checks the rate, and book creates the reservation. Always review the details and final price before you confirm.
+**How does the customer pay?**
+Only on MAQAMI's website. Prebook (hotels) or verify (flights) returns a `checkoutUrl` on book.maqami.co for that exact room or fare. The customer opens it, enters guest or passenger details, pays securely and receives the confirmation there. The MCP server never takes payment.
+
+**Does the checkout link create a real reservation?**
+Yes, once the customer completes checkout on book.maqami.co. Review the details and final price before paying.
 
 **Which transport does the server use?**
 Streamable HTTP at `https://mcp.maqami.co/`. If your client only supports stdio, use the [`maqami-travel` npm bridge](#local-stdio-npm).
 
 **My client warns that there are too many tools. What should I do?**
-Turn on only the tools you need. Most clients let you do this: the tool picker in VS Code, per-tool toggles in Cursor and Claude, and **Tools to Include** in n8n. For a travel assistant, the search, details, prebook and book tools in the tables above are a good start.
+Turn on only the tools you need. Most clients let you do this: the tool picker in VS Code, per-tool toggles in Cursor and Claude, and **Tools to Include** in n8n. For a travel assistant, the search, details, prebook and verify tools in the tables above are a good start.
 
 **What does the server see?**
 An MCP server receives only the tool calls and arguments your client sends. It does not see the rest of your conversation.
@@ -368,15 +371,16 @@ Open an [issue](https://github.com/negm17111995/mcp-server/issues) for bugs and 
 
 ## Examples
 
-[negm17111995/travel-agent-examples](https://github.com/negm17111995/travel-agent-examples) has small, runnable travel assistants that connect to this server from the OpenAI Agents SDK (Python), LangChain with LangGraph (Python) and the Vercel AI SDK (TypeScript). Each one asks for your approval before any prebook or book call.
+[negm17111995/travel-agent-examples](https://github.com/negm17111995/travel-agent-examples) has small, runnable travel assistants that connect to this server from the OpenAI Agents SDK (Python), LangChain with LangGraph (Python) and the Vercel AI SDK (TypeScript). Each one asks for your approval before any call that is not read-only.
 
 ## What you can do
 
 - **Search hotels** with live rates and availability.
 - **Search flights** and compare fares.
 - **Look up cities, airports and hotel details**, including amenities and photos.
-- **Prebook** a hotel or flight rate to confirm price and availability.
-- **Book** the prebooked rate. Booking creates a real reservation and requires guest and payment details.
+- **Hold a price** for a hotel room (prebook) or check a flight fare (verify).
+- **Send a checkout link** on book.maqami.co where the customer enters their details, pays and gets confirmed.
+- **Look up and cancel** existing bookings with the booking ID and email.
 
 ## Example prompts
 
@@ -384,14 +388,14 @@ Open an [issue](https://github.com/negm17111995/mcp-server/issues) for bugs and 
 - "Show me the amenities and photos for the second hotel."
 - "Search flights from Dubai to London on 10 December for one adult."
 - "Which airports serve Tokyo?"
-- "Prebook that room and confirm the final price before I book."
+- "Hold that room and send me the checkout link."
 
 ## Privacy and security
 
 - No API key or account is required to connect.
 - All traffic to `https://mcp.maqami.co/` is encrypted over HTTPS.
-- Searches and bookings are processed by MAQAMI. Guest and payment details you provide for a booking are handled according to the policies published at [maqami.co](https://maqami.co).
-- Booking creates a real reservation. Review the details and final price before confirming.
+- Searches and bookings are processed by MAQAMI. Payment happens only on book.maqami.co; the MCP server never receives card details.
+- Completing checkout creates a real reservation. Review the details and final price before paying.
 - Privacy policy: [maqami.co/privacy-policy](https://maqami.co/privacy-policy/)
 
 ## Development
