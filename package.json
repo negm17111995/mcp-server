@@ -66,7 +66,7 @@
   "homepage": "https://mcp.maqami.co/",
   "repository": {
     "type": "git",
-    "url": "https://github.com/negm17111995/mcp-server"
+    "url": "git+https://github.com/negm17111995/mcp-server.git"
   },
   "bugs": {
     "url": "https://github.com/negm17111995/mcp-server/issues"

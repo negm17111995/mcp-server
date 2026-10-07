@@ -376,7 +376,7 @@ Turn on only the tools you need. Most clients let you do this: the tool picker i
 An MCP server receives only the tool calls and arguments your client sends. It does not see the rest of your conversation.
 
 **Where is the server listed?**
-In the official MCP Registry as `io.github.negm17111995/maqami-travel`, and on npm as `maqami-travel`. It is also a Claude Desktop extension ([`maqami-travel.mcpb`](https://github.com/negm17111995/mcp-server/releases/latest/download/maqami-travel.mcpb)). This repository is also a Gemini CLI extension (`gemini-extension.json`), a Claude Code plugin and marketplace (`.claude-plugin/`), a Codex plugin (`.codex-plugin/plugin.json`) and an Agent Plugins package (`plugin.json` and `mcp.json`). The plugins bundle the `maqami-travel-booking` skill.
+In the official MCP Registry as `io.github.negm17111995/maqami-travel`, and on npm as `maqami-travel`. It is also a Claude Desktop extension ([`maqami-travel.mcpb`](https://github.com/negm17111995/mcp-server/releases/latest/download/maqami-travel.mcpb)). This repository is also a Gemini CLI extension (`gemini-extension.json`), a Claude Code plugin and marketplace (`.claude-plugin/`), a Codex plugin (`.codex-plugin/plugin.json`) and an Agent Plugins package (`plugin.json` and `mcp.json`). The plugins bundle the `maqami-travel-booking` skill. Directories: [Smithery](https://smithery.ai/servers/ahmednegm-1711/maqami-travel), [Glama](https://glama.ai/mcp/servers/negm17111995/mcp-server), Raycast's MCP registry, the ToolSDK MCP registry and the Hermes Agent plugin catalog.
 
 **Can I use it in my own agent or product?**
 Yes, it's a public endpoint. Please follow the confirmation guidance above. For partnerships, contact [info@maqami.co](mailto:info@maqami.co).
