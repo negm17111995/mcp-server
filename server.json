@@ -3,7 +3,7 @@
   "name": "io.github.negm17111995/maqami-travel",
   "title": "MAQAMI Travel",
   "description": "Official MCP server for MAQAMI, a hotel and flight booking platform with 3M+ hotels.",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "websiteUrl": "https://mcp.maqami.co/",
   "icons": [
     {
@@ -27,7 +27,7 @@
       "registryType": "npm",
       "registryBaseUrl": "https://registry.npmjs.org",
       "identifier": "maqami-travel",
-      "version": "1.0.7",
+      "version": "1.0.8",
       "transport": {
         "type": "stdio"
       }

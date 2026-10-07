@@ -338,7 +338,7 @@ Customers always book and pay on MAQAMI's website, book.maqami.co. The server fi
 
 ### Existing bookings
 
-Lookup, amend and cancel tools need the booking ID and the email used to book; the server only returns or changes a booking when both match. Pass both `bookingId` and `email` to every booking tool. Hotel bookings are cancelled with `cancel_hotel_booking`, flights with `post_flights_bookings_bookingid_cancellations` (check `get_flights_bookings_bookingid_cancellations` for the refund estimate first).
+Lookup, amend and cancel tools need the booking ID and the email used to book; the server only returns or changes a booking when both match. Pass both `bookingId` and `email` to every booking tool. Hotel bookings are cancelled with `cancel_hotel_booking`, flights with `post_flights_bookings_bookingid_cancellations` (check `get_flights_bookings_bookingid_cancellations` for the refund estimate first). `put_bookings_bookingid_amend` corrects the holder's name, email or phone on a hotel booking: it takes the `email` currently on the booking and the corrected `holder` (`firstName`, `lastName`, `email`, optional `phone`).
 
 Tool names and required fields above are as published by the server in October 2026. The tool list your client receives from the server is always the source of truth: only the tools it lists exist, and other tool names are rejected. Hotel `offerId`s are signed by the server: pass them exactly as returned, and run the search again if one is rejected.
 
@@ -439,6 +439,7 @@ The bridge tests start a local mock Streamable HTTP server and point the bridge 
 | `glama.json` | Glama directory metadata |
 | `AGENTS.md`, `llms.txt` | Short guides for coding agents and LLM tools |
 | `test/` | Bridge tests against a local mock server, and manifest consistency checks (`npm test`) |
+| `.github/workflows/` | CI (`npm test` on every pull request) and the release workflow that publishes to npm and the Official MCP Registry |
 
 ## Contributing
 

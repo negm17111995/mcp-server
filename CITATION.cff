@@ -10,8 +10,8 @@ authors:
 repository-code: "https://github.com/negm17111995/mcp-server"
 url: "https://mcp.maqami.co/"
 license: MIT
-version: "1.0.7"
-date-released: "2026-10-06"
+version: "1.0.8"
+date-released: "2026-10-07"
 keywords:
   - mcp
   - model-context-protocol
