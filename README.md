@@ -20,6 +20,7 @@ Pick your client. Each line is enough to connect; the full steps are under [Conn
 | --- | --- |
 | Claude Code | `claude mcp add --transport http maqami-travel https://mcp.maqami.co/` |
 | Claude Desktop (one click) | Download [`maqami-travel.mcpb`](https://github.com/negm17111995/mcp-server/releases/latest/download/maqami-travel.mcpb) and open it ([steps](#claude-desktop-extension)) |
+| Any stdio client (npm) | `npx -y maqami-travel` as the server command ([config](#local-stdio-npm)); Node.js 18+ |
 | claude.ai, Claude Desktop and Claude mobile | **Customize → Connectors → Add custom connector**, URL `https://mcp.maqami.co/`, **No sign in**. Works on the Free plan ([steps](#claude-claudeai-and-claude-desktop)) |
 | Cursor | [Add to Cursor](https://cursor.com/en/install-mcp?name=maqami-travel&config=eyJ1cmwiOiJodHRwczovL21jcC5tYXFhbWkuY28vIn0%3D) (one click), or add `"maqami-travel": { "url": "https://mcp.maqami.co/" }` to `mcp.json` |
 | VS Code | [Install in VS Code](https://insiders.vscode.dev/redirect/mcp/install?name=maqami-travel&config=%7B%22type%22%3A%22http%22%2C%22url%22%3A%22https%3A%2F%2Fmcp.maqami.co%2F%22%7D) (one click), or `code --add-mcp '{"name":"maqami-travel","type":"http","url":"https://mcp.maqami.co/"}'` |
