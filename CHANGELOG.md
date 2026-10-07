@@ -2,6 +2,18 @@
 
 All notable changes to the `maqami-travel` npm package, registry metadata and documentation.
 
+## [1.0.9] - 2026-10-07
+
+### Hosted server (https://mcp.maqami.co/)
+- `listBookings` is back with a new input: the `email` and `lastName` used to book, both required. It returns only the hotel bookings whose holder matches both; with only an email, or only a last name, it returns nothing. It is limited to 10 calls per minute per IP. Looking up, changing or cancelling one booking still needs its `bookingId` and `email`.
+- Rate limits per IP: 60 requests per minute and 700 tool calls per hour (replacing 20 per minute and 120 per hour); prebook and `listBookings`: 10 per minute. A limited call gets HTTP 429 with `Retry-After` and a message that says when to try again.
+- Server version 1.0.9; 41 tools.
+
+### Changed
+- Version 1.0.9 in every manifest; `listBookings` is back in the Claude Desktop extension's tool list.
+- README, `AGENTS.md`, `GEMINI.md`, `llms.txt` and the booking skill describe `listBookings`.
+- npm: clearer package description, 45 search keywords and `publishConfig`; README quick start has an `npx -y maqami-travel` row for stdio clients.
+
 ## [1.0.8] - 2026-10-07
 
 ### Hosted server (https://mcp.maqami.co/)

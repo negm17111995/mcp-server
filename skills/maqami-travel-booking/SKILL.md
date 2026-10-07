@@ -54,8 +54,9 @@ Resolve unambiguous relative dates ("next Friday") from today's date. Never inve
 
 ## Existing bookings
 
-The booking ID from the customer's confirmation and the email used to book are required; the server only returns or changes a booking when both match. Pass both `bookingId` and `email` to every tool in this section.
+Every tool here checks who is asking. `listBookings` needs the email and last name used to book; every other tool needs the booking ID from the customer's confirmation and that email. The server only returns or changes a booking when they match.
 
+- **Find:** `listBookings` with the email and last name used to book (hotel bookings; both must match the booking holder).
 - **Look up:** `get_bookings_bookingid` (hotel), `get_flights_bookings_bookingid` and `get_flights_bookings_bookingid_services` (flight), `getExperienceBooking` (experience).
 - **Cancellation estimate:** `get_flights_bookings_bookingid_cancellations` (flight) and `getExperienceBookingCancelPreview` (experience). Show the refund and penalty before any cancellation.
 - **Cancel:** `cancel_hotel_booking`, `post_flights_bookings_bookingid_cancellations`, `cancelExperienceBooking`.

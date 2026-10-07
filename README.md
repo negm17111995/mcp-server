@@ -20,6 +20,7 @@ Pick your client. Each line is enough to connect; the full steps are under [Conn
 | --- | --- |
 | Claude Code | `claude mcp add --transport http maqami-travel https://mcp.maqami.co/` |
 | Claude Desktop (one click) | Download [`maqami-travel.mcpb`](https://github.com/negm17111995/mcp-server/releases/latest/download/maqami-travel.mcpb) and open it ([steps](#claude-desktop-extension)) |
+| Any stdio client (npm) | `npx -y maqami-travel` as the server command ([config](#local-stdio-npm)); Node.js 18+ |
 | claude.ai, Claude Desktop and Claude mobile | **Customize → Connectors → Add custom connector**, URL `https://mcp.maqami.co/`, **No sign in**. Works on the Free plan ([steps](#claude-claudeai-and-claude-desktop)) |
 | Cursor | [Add to Cursor](https://cursor.com/en/install-mcp?name=maqami-travel&config=eyJ1cmwiOiJodHRwczovL21jcC5tYXFhbWkuY28vIn0%3D) (one click), or add `"maqami-travel": { "url": "https://mcp.maqami.co/" }` to `mcp.json` |
 | VS Code | [Install in VS Code](https://insiders.vscode.dev/redirect/mcp/install?name=maqami-travel&config=%7B%22type%22%3A%22http%22%2C%22url%22%3A%22https%3A%2F%2Fmcp.maqami.co%2F%22%7D) (one click), or `code --add-mcp '{"name":"maqami-travel","type":"http","url":"https://mcp.maqami.co/"}'` |
@@ -338,7 +339,7 @@ Customers always book and pay on MAQAMI's website, book.maqami.co. The server fi
 
 ### Existing bookings
 
-Lookup, amend and cancel tools need the booking ID and the email used to book; the server only returns or changes a booking when both match. Pass both `bookingId` and `email` to every booking tool. Hotel bookings are cancelled with `cancel_hotel_booking`, flights with `post_flights_bookings_bookingid_cancellations` (check `get_flights_bookings_bookingid_cancellations` for the refund estimate first). `put_bookings_bookingid_amend` corrects the holder's name, email or phone on a hotel booking: it takes the `email` currently on the booking and the corrected `holder` (`firstName`, `lastName`, `email`, optional `phone`).
+Lookup, amend and cancel tools need the booking ID and the email used to book; the server only returns or changes a booking when both match. Pass both `bookingId` and `email` to every booking tool. To find a customer's hotel bookings, call `listBookings` with the email and last name used to book; it returns only bookings where both match the booking holder. Hotel bookings are cancelled with `cancel_hotel_booking`, flights with `post_flights_bookings_bookingid_cancellations` (check `get_flights_bookings_bookingid_cancellations` for the refund estimate first). `put_bookings_bookingid_amend` corrects the holder's name, email or phone on a hotel booking: it takes the `email` currently on the booking and the corrected `holder` (`firstName`, `lastName`, `email`, optional `phone`).
 
 Tool names and required fields above are as published by the server in October 2026. The tool list your client receives from the server is always the source of truth: only the tools it lists exist, and other tool names are rejected. Hotel `offerId`s are signed by the server: pass them exactly as returned, and run the search again if one is rejected.
 
@@ -394,7 +395,7 @@ Open an [issue](https://github.com/negm17111995/mcp-server/issues) for bugs and 
 - **Look up cities, airports and hotel details**, including amenities and photos.
 - **Hold a price** for a hotel room (prebook) or check a flight fare (verify).
 - **Send a checkout link** on book.maqami.co where the customer enters their details, pays and gets confirmed.
-- **Look up and cancel** existing bookings with the booking ID and email.
+- **Find, look up and cancel** existing bookings: find them with the email and last name, then act on one with its booking ID and email.
 
 ## Example prompts
 
