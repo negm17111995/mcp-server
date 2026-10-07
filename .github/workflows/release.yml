@@ -1,0 +1,79 @@
+# Publishes a release everywhere it is distributed:
+#   1. GitHub release asset: maqami-travel.mcpb (Claude Desktop extension)
+#   2. npm: maqami-travel (stdio bridge), with provenance
+#   3. Official MCP Registry: server.json, authenticated with GitHub OIDC
+# Each publish step is skipped when that version is already published, so the workflow can be re-run safely.
+#
+# npm needs one of: a trusted publisher on npmjs.com for this repository and release.yml (recommended),
+# or an NPM_TOKEN repository secret. The MCP Registry needs nothing: io.github.negm17111995/* is verified by GitHub OIDC.
+name: Release
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: write # upload the .mcpb release asset
+  id-token: write # npm provenance / trusted publishing and MCP Registry login
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: lts/*
+          registry-url: https://registry.npmjs.org
+
+      - run: npm ci
+      - run: npm test
+
+      - name: Read the version
+        id: version
+        run: |
+          version=$(node -p "require('./package.json').version")
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          if [ "$GITHUB_EVENT_NAME" = "release" ] && [ "${GITHUB_REF_NAME#v}" != "$version" ]; then
+            echo "::error::Release tag $GITHUB_REF_NAME does not match package.json version $version"
+            exit 1
+          fi
+
+      - name: Build the Claude Desktop extension
+        run: npm run build:mcpb
+
+      - name: Attach maqami-travel.mcpb to the release
+        if: github.event_name == 'release'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "$GITHUB_REF_NAME" dist/maqami-travel.mcpb --clobber
+
+      - name: Publish to npm
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          if npm view "maqami-travel@$VERSION" version >/dev/null 2>&1; then
+            echo "maqami-travel@$VERSION is already on npm"
+          else
+            npm publish --provenance --access public
+          fi
+
+      - name: Publish to the Official MCP Registry
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          name=$(node -p "require('./server.json').name")
+          if curl -fsS "https://registry.modelcontextprotocol.io/v0.1/servers?search=$name" | jq -e --arg v "$VERSION" '.servers[] | select(.server.version == $v)' >/dev/null; then
+            echo "$name $VERSION is already in the registry"
+            exit 0
+          fi
+          curl -fsSL "https://github.com/modelcontextprotocol/registry/releases/latest/download/mcp-publisher_linux_amd64.tar.gz" | tar xz mcp-publisher
+          ./mcp-publisher login github-oidc
+          ./mcp-publisher publish
