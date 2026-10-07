@@ -13,9 +13,10 @@ Connection details:
 
 Typical flows (the server's tools/list is authoritative):
 
-- Hotels: post_hotels_rates (cityName + countryCode, coordinates, iataCode, hotelIds or aiSearch) → get_data_hotel → user confirmation → post_rates_prebook (offerId exactly as returned) → give the customer checkoutUrl (https://book.maqami.co/booking?prebookId=...)
-- Flights: get_data_flights_airports → post_flights_rates → user confirmation → post_flights_verify → give the customer checkoutUrl (https://book.maqami.co/flights/booking?offerId=...)
-- Existing bookings: lookup, amend and cancel tools need the booking ID and the email used to book. Only the tools in tools/list exist.
+- Hotels: post_hotels_rates (cityName + countryCode, coordinates, iataCode, hotelIds or aiSearch) → get_data_hotel → user confirmation → post_rates_prebook (offerId exactly as returned) → give the customer checkoutUrl (https://book.maqami.co/booking?prebookId=...). To find a hotel by name: get_data_hotels with hotelName and countryCode.
+- Flights: get_data_flights_airports → post_flights_rates → post_flights_verify → user confirmation of the final price → give the customer checkoutUrl (https://book.maqami.co/flights/booking?offerId=...)
+- Existing bookings: pass bookingId and the email used to book to every lookup, amend and cancel tool. Only the tools in tools/list exist.
+- Large responses: get_data_facilities, get_data_chains, get_data_iatacodes and get_data_cities return whole reference lists; prefer targeted tools and set limit on searches.
 
 ## Docs
 

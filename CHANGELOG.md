@@ -6,6 +6,14 @@ All notable changes to the `maqami-travel` npm package, registry metadata and do
 
 ### Added
 - Claude Desktop extension: `mcpb/manifest.json` and `scripts/build-mcpb.sh` (`npm run build:mcpb`) build `maqami-travel.mcpb`, which wraps the 1.0.7 stdio bridge. It is attached to the latest GitHub release. README: one-click Claude Desktop install, and which ChatGPT and Claude plans can connect. No changes to `index.js` or the hosted server.
+- `test/manifests.test.js` (part of `npm test`): every manifest must parse, carry the `package.json` version and point at `https://mcp.maqami.co/`.
+- README: one-click install links for Cursor and VS Code.
+- `server.json`: the MAQAMI logo as the registry icon (takes effect at the next registry publish).
+
+### Changed
+- Skill, README, `AGENTS.md`, `GEMINI.md` and `llms.txt` now match how the live tools behave: find a hotel by name with `get_data_hotels` and `hotelName` (`get_data_hotel_search` returns one semantic match, which can be a different hotel); pass `bookingId` and `email` to every booking tool; flight offers expire, so search again if verify reports one is gone; set `limit`, `maxRatesPerHotel` and flight `filters`, and avoid the whole-list reference tools unless an ID is needed. The flight flow is verify, then confirm the final price, everywhere. Documentation only.
+- Claude Desktop extension description: removed the unverifiable "wholesale rates" claim.
+- Version lists in `AGENTS.md` and `CONTRIBUTING.md` now name every manifest; `CITATION.cff` has the 1.0.7 release date.
 
 ## [1.0.7] - 2026-10-06
 

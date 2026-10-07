@@ -23,7 +23,7 @@ Security issues go through [SECURITY.md](SECURITY.md), not public issues.
    ```
 
    The tests start a local mock server and never call the live endpoint. Please don't add tests or scripts that call `https://mcp.maqami.co/`.
-4. If you change a version number, update it everywhere: `package.json`, `server.json` (both `version` fields), `gemini-extension.json`, `plugin.json` and `.claude-plugin/plugin.json`.
+4. If you change a version number, update it everywhere: `package.json`, `server.json` (both `version` fields), `gemini-extension.json`, `plugin.json`, `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json` (both `version` fields), `.codex-plugin/plugin.json`, `mcpb/manifest.json` and `CITATION.cff`. `npm test` checks that they match.
 5. Describe what you changed and how you checked it.
 
 ## Writing style

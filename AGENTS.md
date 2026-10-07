@@ -39,10 +39,12 @@ For stdio-only clients:
 Read the tool list from the server (`tools/list`); it is the source of truth for names and input schemas. The usual flows are:
 
 - **Hotels**: search rates by city, coordinates, airport, hotel IDs or `aiSearch` (`post_hotels_rates`) → hotel details (`get_data_hotel`, `get_data_reviews`) → confirm with the user → prebook (`post_rates_prebook`) → give the customer the `checkoutUrl` (`https://book.maqami.co/booking?prebookId=...`).
-- **Flights**: find airports (`get_data_flights_airports`) → search (`post_flights_rates`) → confirm with the user → verify (`post_flights_verify`) → give the customer the `checkoutUrl` (`https://book.maqami.co/flights/booking?offerId=...`).
-- **Existing bookings**: lookup, amend and cancel tools (for example `get_bookings_bookingid`, `cancel_hotel_booking`) need the booking ID and the email used to book.
+- **Flights**: find airports (`get_data_flights_airports`) → search (`post_flights_rates`) → verify the chosen offer (`post_flights_verify`) → confirm the final price with the user → give the customer the `checkoutUrl` (`https://book.maqami.co/flights/booking?offerId=...`).
+- **Existing bookings**: lookup, amend and cancel tools (for example `get_bookings_bookingid`, `cancel_hotel_booking`) need the booking ID and the email used to book. Pass both `bookingId` and `email` to every booking tool.
 
-Hotel rate searches need `checkin`, `checkout`, `occupancies`, `currency`, `guestNationality` and one location field (`cityName` with `countryCode`, `latitude` and `longitude`, `iataCode`, `hotelIds` or `aiSearch`). There is no places search. Flight searches need `legs` (each with `origin`, `destination` and `date`), `adults` and `currency`.
+Hotel rate searches need `checkin`, `checkout`, `occupancies`, `currency`, `guestNationality` and one location field (`cityName` with `countryCode`, `latitude` and `longitude`, `iataCode`, `hotelIds` or `aiSearch`). There is no places search. To find a hotel by name, call `get_data_hotels` with `hotelName` and `countryCode` (or `cityName`) and pass its `id` in `hotelIds`; `get_data_hotel_search` returns a single semantic match that can be a different hotel. Flight searches need `legs` (each with `origin`, `destination` and `date`), `adults` and `currency`. Flight offers expire (see `expiration`); search again if verify reports the offer is gone.
+
+Keep responses small: set `limit` and `maxRatesPerHotel` on hotel searches and `filters` on flight searches. `get_data_facilities`, `get_data_chains`, `get_data_iatacodes` and `get_data_cities` return whole reference lists that can exceed a context window, so call them only when you need an ID from them.
 
 Recommended behaviour when acting for a user:
 
@@ -57,7 +59,7 @@ Recommended behaviour when acting for a user:
 ## Working on this repository
 
 - The hosted server is deployed separately and is not in this repository. `index.js` is only the npm stdio bridge.
-- Run the tests with `npm install && npm test`. They use a local mock server through `MAQAMI_MCP_URL` and never call the live endpoint. Do not point tests or scripts at `https://mcp.maqami.co/`.
-- Keep versions in sync when releasing: `package.json`, `server.json` (both `version` fields), `gemini-extension.json`, `plugin.json` and `.claude-plugin/plugin.json`.
+- Run the tests with `npm install && npm test`. The bridge tests use a local mock server through `MAQAMI_MCP_URL` and never call the live endpoint; the manifest tests check that every manifest parses and matches `package.json`. Do not point tests or scripts at `https://mcp.maqami.co/`.
+- Keep versions in sync when releasing: `package.json`, `server.json` (both `version` fields), `gemini-extension.json`, `plugin.json`, `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json` (both `version` fields), `.codex-plugin/plugin.json`, `mcpb/manifest.json` and `CITATION.cff`. `npm test` fails if one is missed.
 - Documentation should stay factual: describe what the tools do, and avoid unverifiable claims about prices or coverage.
 - GitHub Actions is not used for checks at the moment. Run `npm test` locally before opening a pull request.

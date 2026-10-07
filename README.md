@@ -21,8 +21,8 @@ Pick your client. Each line is enough to connect; the full steps are under [Conn
 | Claude Code | `claude mcp add --transport http maqami-travel https://mcp.maqami.co/` |
 | Claude Desktop (one click) | Download [`maqami-travel.mcpb`](https://github.com/negm17111995/mcp-server/releases/latest/download/maqami-travel.mcpb) and open it ([steps](#claude-desktop-extension)) |
 | claude.ai, Claude Desktop and Claude mobile | **Customize → Connectors → Add custom connector**, URL `https://mcp.maqami.co/`, **No sign in**. Works on the Free plan ([steps](#claude-claudeai-and-claude-desktop)) |
-| Cursor | Add `"maqami-travel": { "url": "https://mcp.maqami.co/" }` to `mcp.json`, or use the [one-click link](#cursor) |
-| VS Code | `code --add-mcp '{"name":"maqami-travel","type":"http","url":"https://mcp.maqami.co/"}'` |
+| Cursor | [Add to Cursor](https://cursor.com/en/install-mcp?name=maqami-travel&config=eyJ1cmwiOiJodHRwczovL21jcC5tYXFhbWkuY28vIn0%3D) (one click), or add `"maqami-travel": { "url": "https://mcp.maqami.co/" }` to `mcp.json` |
+| VS Code | [Install in VS Code](https://insiders.vscode.dev/redirect/mcp/install?name=maqami-travel&config=%7B%22type%22%3A%22http%22%2C%22url%22%3A%22https%3A%2F%2Fmcp.maqami.co%2F%22%7D) (one click), or `code --add-mcp '{"name":"maqami-travel","type":"http","url":"https://mcp.maqami.co/"}'` |
 | Windsurf | Add `"maqami-travel": { "serverUrl": "https://mcp.maqami.co/" }` to `mcp_config.json` |
 | Gemini CLI | `gemini extensions install https://github.com/negm17111995/mcp-server` |
 | OpenAI Codex | `codex mcp add maqami-travel --url https://mcp.maqami.co/` |
@@ -102,7 +102,7 @@ Add to `~/.cursor/mcp.json` (global) or `.cursor/mcp.json` (project):
 }
 ```
 
-Or install with one click by opening this link in your browser:
+Or install with one click: [Add to Cursor](https://cursor.com/en/install-mcp?name=maqami-travel&config=eyJ1cmwiOiJodHRwczovL21jcC5tYXFhbWkuY28vIn0%3D). The same install as a deeplink, to open in your browser:
 
 ```text
 cursor://anysphere.cursor-deeplink/mcp/install?name=maqami-travel&config=eyJ1cmwiOiJodHRwczovL21jcC5tYXFhbWkuY28vIn0=
@@ -123,7 +123,7 @@ Add to `.vscode/mcp.json` in your workspace:
 }
 ```
 
-Or add it to your user profile from the command line:
+Or [install in VS Code](https://insiders.vscode.dev/redirect/mcp/install?name=maqami-travel&config=%7B%22type%22%3A%22http%22%2C%22url%22%3A%22https%3A%2F%2Fmcp.maqami.co%2F%22%7D) with one click, or add it to your user profile from the command line:
 
 ```bash
 code --add-mcp '{"name":"maqami-travel","type":"http","url":"https://mcp.maqami.co/"}'
@@ -320,7 +320,7 @@ Customers always book and pay on MAQAMI's website, book.maqami.co. The server fi
 
 | Step | What happens | Tool (example) |
 | --- | --- | --- |
-| 1. Search rates | Live rates for the dates and guests. Needs `checkin`, `checkout`, `occupancies`, `currency`, `guestNationality` and one location field (`cityName` with `countryCode`, `latitude` and `longitude`, `iataCode`, `hotelIds` or `aiSearch`). To find hotels by name, use `get_data_hotels` or `get_data_hotel_search`. Each rate has an `offerId`. | `post_hotels_rates` |
+| 1. Search rates | Live rates for the dates and guests. Needs `checkin`, `checkout`, `occupancies`, `currency`, `guestNationality` and one location field (`cityName` with `countryCode`, `latitude` and `longitude`, `iataCode`, `hotelIds` or `aiSearch`). To find a hotel by name, call `get_data_hotels` with `hotelName` and `countryCode`, then search by `hotelIds`. Each rate has an `offerId`. | `post_hotels_rates` |
 | 2. Show details | Description, amenities, photos and reviews for the hotels the user is interested in | `get_data_hotel`, `get_data_reviews` |
 | 3. Confirm | Show the user the hotel, room, dates, guests, price and cancellation terms, and wait for a clear yes | (your agent) |
 | 4. Prebook | Holds one `offerId`, passed exactly as the search returned it, and returns a `prebookId` with the final price, the cancellation terms and a `checkoutUrl` | `post_rates_prebook` |
@@ -332,13 +332,13 @@ Customers always book and pay on MAQAMI's website, book.maqami.co. The server fi
 | --- | --- | --- |
 | 1. Find airports | Resolve cities to IATA airport codes | `get_data_flights_airports` |
 | 2. Search flights | Live offers. Needs `legs` (each with `origin`, `destination` and `date`), `adults` and `currency`. One leg for one-way, two for a round trip. Also returns `searchUrl`, the same search on book.maqami.co. | `post_flights_rates` |
-| 3. Verify | Confirms an `offerId` is still available and returns the latest price, baggage, fare rules and a `checkoutUrl` for that offer | `post_flights_verify` |
+| 3. Verify | Confirms an `offerId` is still available and returns the latest price, baggage, fare rules and a `checkoutUrl` for that offer. Offers expire (see `expiration`); if one is gone, search again. | `post_flights_verify` |
 | 4. Confirm | Show the user the flights, passengers, final price and fare rules, and wait for a clear yes | (your agent) |
 | 5. Checkout | Give the customer the `checkoutUrl` (`https://book.maqami.co/flights/booking?offerId=...`) promptly; the fare is held for a limited time | (your agent) |
 
 ### Existing bookings
 
-Lookup, amend and cancel tools need the booking ID and the email used to book; the server only returns or changes a booking when both match. Hotel bookings are cancelled with `cancel_hotel_booking`, flights with `post_flights_bookings_bookingid_cancellations` (check `get_flights_bookings_bookingid_cancellations` for the refund estimate first).
+Lookup, amend and cancel tools need the booking ID and the email used to book; the server only returns or changes a booking when both match. Pass both `bookingId` and `email` to every booking tool. Hotel bookings are cancelled with `cancel_hotel_booking`, flights with `post_flights_bookings_bookingid_cancellations` (check `get_flights_bookings_bookingid_cancellations` for the refund estimate first).
 
 Tool names and required fields above are as published by the server in October 2026. The tool list your client receives from the server is always the source of truth: only the tools it lists exist, and other tool names are rejected. Hotel `offerId`s are signed by the server: pass them exactly as returned, and run the search again if one is rejected.
 
@@ -350,6 +350,7 @@ Tool names and required fields above are as published by the server in October 2
 - **Send only links the tools return.** Give the customer the `checkoutUrl` from prebook or verify, and never ask for card or passport details in the chat.
 - **If a price or availability changes** at prebook or verify, show the new result and ask again.
 - **Keep guest details to what the booking needs**, and only send them once the user has chosen an option.
+- **Keep responses small.** Set `limit` and `maxRatesPerHotel` on hotel searches and `filters` on flight searches. `get_data_facilities`, `get_data_chains`, `get_data_iatacodes` and `get_data_cities` return whole reference lists, so call them only when you need an ID from them; find airports with `get_data_flights_airports` instead.
 
 The [examples](#examples) show one way to do this: read-only tools run automatically and every other tool waits for the user's approval.
 
@@ -420,7 +421,7 @@ npm install
 npm test
 ```
 
-The tests start a local mock Streamable HTTP server and point the bridge at it with the `MAQAMI_MCP_URL` environment variable. That variable exists for testing only; by default the bridge connects to `https://mcp.maqami.co/`.
+The bridge tests start a local mock Streamable HTTP server and point the bridge at it with the `MAQAMI_MCP_URL` environment variable. That variable exists for testing only; by default the bridge connects to `https://mcp.maqami.co/`. The manifest tests check that every manifest parses, points at the same endpoint and carries the version from `package.json`.
 
 ### Repository layout
 
@@ -437,6 +438,7 @@ The tests start a local mock Streamable HTTP server and point the bridge at it w
 | `skills/maqami-travel-booking/SKILL.md` | Booking skill bundled with the plugins |
 | `glama.json` | Glama directory metadata |
 | `AGENTS.md`, `llms.txt` | Short guides for coding agents and LLM tools |
+| `test/` | Bridge tests against a local mock server, and manifest consistency checks (`npm test`) |
 
 ## Contributing
 

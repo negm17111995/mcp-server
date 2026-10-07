@@ -4,7 +4,7 @@
   "display_name": "MAQAMI Travel",
   "version": "1.0.7",
   "description": "Search hotels and flights on MAQAMI and get a secure checkout link on book.maqami.co.",
-  "long_description": "Official MAQAMI extension. Search 3M+ hotels and global flights at wholesale rates, read hotel details and reviews, and get a secure checkout link on book.maqami.co for the room or fare you choose. You review the price, pay and get your confirmation on book.maqami.co; payment is never taken in the chat. You can also look up, amend or cancel an existing hotel, flight or tour booking with its booking ID and email. No account or API key needed.",
+  "long_description": "Official MAQAMI extension. Search 3M+ hotels and global flights, read hotel details and reviews, and get a secure checkout link on book.maqami.co for the room or fare you choose. You review the price, pay and get your confirmation on book.maqami.co; payment is never taken in the chat. You can also look up, amend or cancel an existing hotel, flight or tour booking with its booking ID and email. No account or API key needed.",
   "author": {
     "name": "MAQAMI",
     "email": "info@maqami.co",
