@@ -338,7 +338,7 @@ Customers always book and pay on MAQAMI's website, book.maqami.co. The server fi
 
 ### Existing bookings
 
-Lookup, amend and cancel tools need the booking ID and the email used to book; the server only returns or changes a booking when both match. Pass both `bookingId` and `email` to every booking tool. Hotel bookings are cancelled with `cancel_hotel_booking`, flights with `post_flights_bookings_bookingid_cancellations` (check `get_flights_bookings_bookingid_cancellations` for the refund estimate first). `put_bookings_bookingid_amend` corrects the holder's name, email or phone on a hotel booking: it takes the `email` currently on the booking and the corrected `holder` (`firstName`, `lastName`, `email`, optional `phone`).
+Lookup, amend and cancel tools need the booking ID and the email used to book; the server only returns or changes a booking when both match. Pass both `bookingId` and `email` to every booking tool. To find a customer's hotel bookings, call `listBookings` with the email and last name used to book; it returns only bookings where both match the booking holder. Hotel bookings are cancelled with `cancel_hotel_booking`, flights with `post_flights_bookings_bookingid_cancellations` (check `get_flights_bookings_bookingid_cancellations` for the refund estimate first). `put_bookings_bookingid_amend` corrects the holder's name, email or phone on a hotel booking: it takes the `email` currently on the booking and the corrected `holder` (`firstName`, `lastName`, `email`, optional `phone`).
 
 Tool names and required fields above are as published by the server in October 2026. The tool list your client receives from the server is always the source of truth: only the tools it lists exist, and other tool names are rejected. Hotel `offerId`s are signed by the server: pass them exactly as returned, and run the search again if one is rejected.
 
@@ -394,7 +394,7 @@ Open an [issue](https://github.com/negm17111995/mcp-server/issues) for bugs and 
 - **Look up cities, airports and hotel details**, including amenities and photos.
 - **Hold a price** for a hotel room (prebook) or check a flight fare (verify).
 - **Send a checkout link** on book.maqami.co where the customer enters their details, pays and gets confirmed.
-- **Look up and cancel** existing bookings with the booking ID and email.
+- **Find, look up and cancel** existing bookings: find them with the email and last name, then act on one with its booking ID and email.
 
 ## Example prompts
 

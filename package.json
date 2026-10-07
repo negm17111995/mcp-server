@@ -1,6 +1,6 @@
 {
   "name": "maqami-travel",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "mcpName": "io.github.negm17111995/maqami-travel",
   "description": "Official MCP server for MAQAMI, a hotel and flight booking platform with 3M+ hotels. Search live hotel rates and flights, look up cities, airports and hotel details, then send the customer a secure checkout link on book.maqami.co. Remote Streamable HTTP endpoint, no API key required.",
   "type": "module",

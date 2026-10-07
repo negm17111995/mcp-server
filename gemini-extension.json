@@ -1,6 +1,6 @@
 {
   "name": "maqami-travel",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Official MCP server for MAQAMI, a hotel and flight booking platform with 3M+ hotels.",
   "mcpServers": {
     "maqami-travel": {

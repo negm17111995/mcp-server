@@ -10,7 +10,7 @@ authors:
 repository-code: "https://github.com/negm17111995/mcp-server"
 url: "https://mcp.maqami.co/"
 license: MIT
-version: "1.0.8"
+version: "1.0.9"
 date-released: "2026-10-07"
 keywords:
   - mcp
